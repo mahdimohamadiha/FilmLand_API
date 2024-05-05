@@ -6,7 +6,7 @@ namespace FilmLand.Database
 {
     public class DapperEntities
     {
-        public static void ExecuteWitoutReturn(string procName, string connectionString, DynamicParameters param = null)
+        public static string Insert(string procName, string connectionString, Object param = null)
         {
             try
             {
@@ -14,9 +14,11 @@ namespace FilmLand.Database
                 if (db.State == ConnectionState.Closed)
                     db.Open();
                 db.Execute(procName, param);
+                return "Success";
             }
             catch (Exception e)
             {
+                return "Application Error : " + e.Message;
             }
         }
 

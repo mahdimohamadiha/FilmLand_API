@@ -2,6 +2,7 @@
 using FilmLand.DataAccsess.Repository.IRepository;
 using FilmLand.Database;
 using FilmLand.Models;
+using FilmLand.Models.DTO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -24,6 +25,24 @@ namespace FilmLand_API.Controllers
         {
             List<MenuSite> result = _unitOfWork.SiteMenu.GetAllSiteMenu();
             return Ok(result);
+        }
+
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public ActionResult<string> PostMenuSite([FromBody] MenuSiteDTO menuSiteDTO)
+        {
+            string result  = _unitOfWork.SiteMenu.AddSiteMenu(menuSiteDTO);
+            if (result == "Success") 
+            {
+                return StatusCode(StatusCodes.Status201Created);
+            }
+            else
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+            
         }
     }
 }
