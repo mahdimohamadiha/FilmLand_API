@@ -12,15 +12,21 @@ namespace FilmLand.DataAccsess.Repository
 {
     public class SiteMenuRepository : ISiteMenuRepository
     {
-        public List<MenuSite> GetAllSiteMenu()
+        public IEnumerable<MenuSite> GetAllSiteMenu()
         {
-            var menuSite = DapperEntities.ReturnList<MenuSite>("SELECT * FROM MenuSite", Connection.FilmLand());
-            return menuSite.ToList();
+            IEnumerable<MenuSite> menuSite = DapperEntities.QueryDatabase<MenuSite>("SELECT * FROM MenuSite", Connection.FilmLand());
+            return menuSite;
         }
 
         public string AddSiteMenu(MenuSiteDTO menuSitedDTO)
         {
-            string result = DapperEntities.Insert("INSERT INTO MenuSite (Id, Name, Url, Sort, CreateDate, IsStatus, IsDelete) VALUES (@Id, @Name, @Url, @Sort, GETDATE(), 1, 0)", Connection.FilmLand(), new { Id = menuSitedDTO.Id, Name = menuSitedDTO.Name, Url = menuSitedDTO.Url, Sort = menuSitedDTO.Sort });
+            string result = DapperEntities.ExecuteDatabase("INSERT INTO MenuSite (Id, Name, Url, Sort, CreateDate, IsStatus, IsDelete) VALUES (@Id, @Name, @Url, @Sort, GETDATE(), 1, 0)", Connection.FilmLand(), new { Id = menuSitedDTO.Id, Name = menuSitedDTO.Name, Url = menuSitedDTO.Url, Sort = menuSitedDTO.Sort });
+            return result;
+        }
+
+        public string UpdateSiteMenu(MenuSiteDTO menuSitedDTO)
+        {
+            string result = DapperEntities.ExecuteDatabase("UPDATE MenuSite SET Name = @Name, Url = @Url, Sort = @Sort, ModifiedDate = GETDATE() WHERE Id = @Id", Connection.FilmLand(), new { Id = menuSitedDTO.Id, Name = menuSitedDTO.Name, Url = menuSitedDTO.Url, Sort = menuSitedDTO.Sort });
             return result;
         }
     }

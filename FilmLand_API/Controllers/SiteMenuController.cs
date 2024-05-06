@@ -21,13 +21,18 @@ namespace FilmLand_API.Controllers
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public ActionResult<List<MenuSite>> GetMenuSite()
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public ActionResult<IEnumerable<MenuSite>> GetMenuSite()
         {
-            List<MenuSite> result = _unitOfWork.SiteMenu.GetAllSiteMenu();
+            IEnumerable<MenuSite> result = _unitOfWork.SiteMenu.GetAllSiteMenu();
+            if(result == null)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
             return Ok(result);
         }
 
-        [HttpPost]
+        [HttpPost("Add")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -37,6 +42,27 @@ namespace FilmLand_API.Controllers
             if (result == "Success") 
             {
                 return StatusCode(StatusCodes.Status201Created);
+            }
+            else
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+        [HttpPut("Edit/{id:int}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public IActionResult PutMenuSite(int id, [FromBody] MenuSiteDTO menuSiteDTO)
+        {
+            if (id != menuSiteDTO.Id)
+            {
+                return BadRequest();
+            }
+
+            string result = _unitOfWork.SiteMenu.UpdateSiteMenu(menuSiteDTO);
+            if (result == "Success")
+            {
+                return NoContent();
             }
             else
             {

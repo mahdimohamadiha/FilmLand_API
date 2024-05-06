@@ -6,7 +6,22 @@ namespace FilmLand.Database
 {
     public class DapperEntities
     {
-        public static string Insert(string procName, string connectionString, Object param = null)
+        public static IEnumerable<T> QueryDatabase<T>(string procName, string connectionString, Object param = null)
+        {
+            try
+            {
+                using IDbConnection db = new SqlConnection(connectionString);
+                if (db.State == ConnectionState.Closed)
+                    db.Open();
+                return db.Query<T>(procName, param);
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+        }
+
+        public static string ExecuteDatabase(string procName, string connectionString, Object param = null)
         {
             try
             {
@@ -81,20 +96,7 @@ namespace FilmLand.Database
         }
 
         //DapperORM.ReturnList<PersonelModel>
-        public static IEnumerable<T> ReturnList<T>(string procName, string connectionString, DynamicParameters param = null)
-        {
-            try
-            {
-                using IDbConnection db = new SqlConnection(connectionString);
-                if (db.State == ConnectionState.Closed)
-                    db.Open();
-                return db.Query<T>(procName, param);
-            }
-            catch (Exception e)
-            {
-                return new List<T>(1);
-            }
-        }
+        
 
         public static async Task<IEnumerable<T>> ReturnListQuery<T>(string query, string connectionString, DynamicParameters param = null)
         {
