@@ -14,9 +14,12 @@ namespace FilmLand_API.Controllers
     {
         private readonly IUnitOfWork _unitOfWork;
 
-        public SiteMenuController(IUnitOfWork unitOfWork)
+        private readonly ILogger<SiteMenuController> _logger;
+
+        public SiteMenuController(IUnitOfWork unitOfWork, ILogger<SiteMenuController> logger)
         {
             _unitOfWork = unitOfWork;
+            _logger = logger;
         }
 
         [HttpGet]
@@ -24,6 +27,7 @@ namespace FilmLand_API.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<IEnumerable<MenuSite>> GetAllMenuSite()
         {
+            //_logger.LogError("aaaaaaaa");
             IEnumerable<MenuSite> menuSiteList = _unitOfWork.SiteMenu.GetAllMenuSite();
             if(menuSiteList == null)
             {

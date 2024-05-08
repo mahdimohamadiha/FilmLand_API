@@ -1,23 +1,24 @@
 ﻿using Dapper;
 using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Logging;
 using System.Data;
 
 namespace FilmLand.Database
 {
     public class DapperEntities
     {
-        public static IEnumerable<T> QueryDatabase<T>(string procName, string connectionString, Object param = null)
+        public static (IEnumerable<T>, string) QueryDatabase<T>(string procName, string connectionString, Object param = null)
         {
             try
             {
                 using IDbConnection db = new SqlConnection(connectionString);
                 if (db.State == ConnectionState.Closed)
                     db.Open();
-                return db.Query<T>(procName, param);
+                return (db.Query<T>(procName, param), "Success");
             }
             catch (Exception e)
             {
-                return null;
+                return (null, "Application Error : " + e.Message);
             }
         }
 
