@@ -18,7 +18,7 @@ namespace FilmLand.Database
             }
             catch (Exception e)
             {
-                return (null, "Application Error : " + e.Message);
+                return (null, e.Message);
             }
         }
 
@@ -34,7 +34,7 @@ namespace FilmLand.Database
             }
             catch (Exception e)
             {
-                return "Application Error : " + e.Message;
+                return e.Message;
             }
         }
 

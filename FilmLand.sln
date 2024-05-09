@@ -3,13 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34714.143
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FilmLand_API", "FilmLand_API\FilmLand_API.csproj", "{1C7B339E-6C46-4E39-9235-376F32C30BA2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FilmLand_API", "FilmLand_API\FilmLand_API.csproj", "{1C7B339E-6C46-4E39-9235-376F32C30BA2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FilmLand.DataAccsess", "FilmLand.DataAccsess\FilmLand.DataAccsess.csproj", "{A715D79A-B8CF-4417-A9FA-12FF05029C8E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FilmLand.DataAccsess", "FilmLand.DataAccsess\FilmLand.DataAccsess.csproj", "{A715D79A-B8CF-4417-A9FA-12FF05029C8E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FilmLand.Database", "FilmLand.Database\FilmLand.Database.csproj", "{EA93B970-83BC-4801-8DCF-94D9E9822090}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FilmLand.Database", "FilmLand.Database\FilmLand.Database.csproj", "{EA93B970-83BC-4801-8DCF-94D9E9822090}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FilmLand.Models", "FilmLand.Models\FilmLand.Models.csproj", "{55813BE6-2E4C-4342-9826-835AB86DC0F0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FilmLand.Models", "FilmLand.Models\FilmLand.Models.csproj", "{55813BE6-2E4C-4342-9826-835AB86DC0F0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FilmLand.Logs", "FilmLand.Logs\FilmLand.Logs.csproj", "{09A0BA05-13F4-4847-98A5-0FA0A4BC2811}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{55813BE6-2E4C-4342-9826-835AB86DC0F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{55813BE6-2E4C-4342-9826-835AB86DC0F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{55813BE6-2E4C-4342-9826-835AB86DC0F0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{09A0BA05-13F4-4847-98A5-0FA0A4BC2811}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{09A0BA05-13F4-4847-98A5-0FA0A4BC2811}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{09A0BA05-13F4-4847-98A5-0FA0A4BC2811}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{09A0BA05-13F4-4847-98A5-0FA0A4BC2811}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

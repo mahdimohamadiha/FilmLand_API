@@ -1,4 +1,5 @@
 ﻿using FilmLand.DataAccsess.Repository.IRepository;
+using FilmLand.Logs;
 using Microsoft.Extensions.Logging;
 using Serilog.Core;
 using System;
@@ -11,9 +12,9 @@ namespace FilmLand.DataAccsess.Repository
 {
     public class UnitOfWork : IUnitOfWork
     {
-        public UnitOfWork(ILogger<UnitOfWork> logger)
+        public UnitOfWork(ICustomLogger customLogger)
         {
-            SiteMenu = new SiteMenuRepository(logger);
+            SiteMenu = new SiteMenuRepository(customLogger);
         }
 
         public ISiteMenuRepository SiteMenu { get; private set; }

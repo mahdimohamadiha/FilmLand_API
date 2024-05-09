@@ -2,12 +2,14 @@ using FilmLand.DataAccsess.Repository.IRepository;
 using FilmLand.DataAccsess.Repository;
 using Serilog;
 using Serilog.Events;
+using FilmLand.Logs;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<ICustomLogger, CustomLogger>();
 
 Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Information()
@@ -15,7 +17,7 @@ Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Override("Microsoft", LogEventLevel.Fatal)
     .MinimumLevel.Override("System", LogEventLevel.Fatal)
     .WriteTo.Console()
-    .WriteTo.File("apilog-.log", rollingInterval: RollingInterval.Day)
+    .WriteTo.File("../FilmLand.Logs/Logs/apilog-.log", rollingInterval: RollingInterval.Day)
     .CreateLogger();
 
 builder.Host.UseSerilog();

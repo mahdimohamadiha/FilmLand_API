@@ -16,6 +16,7 @@
   <ItemGroup>
     <ProjectReference Include="..\FilmLand.DataAccsess\FilmLand.DataAccsess.csproj" />
     <ProjectReference Include="..\FilmLand.Database\FilmLand.Database.csproj" />
+    <ProjectReference Include="..\FilmLand.Logs\FilmLand.Logs.csproj" />
     <ProjectReference Include="..\FilmLand.Models\FilmLand.Models.csproj" />
   </ItemGroup>
 
