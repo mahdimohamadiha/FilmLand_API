@@ -36,7 +36,8 @@ namespace FilmLand.DataAccsess.Repository
 
         public string AddMenuSite(MenuSiteDTO menuSiteDTO)
         {
-            string message = DapperEntities.ExecuteDatabase("INSERT INTO MenuSite (Id, Name, Url, Sort, CreateDate, IsStatus, IsDelete) VALUES (@Id, @Name, @Url, @Sort, GETDATE(), 1, 0)", Connection.FilmLand(), new { Id = menuSiteDTO.Id, Name = menuSiteDTO.Name, Url = menuSiteDTO.Url, Sort = menuSiteDTO.Sort });
+            Guid id = Guid.NewGuid();
+            string message = DapperEntities.ExecuteDatabase("INSERT INTO MenuSite (Id, Name, Url, Sort, CreateDate, IsStatus, IsDelete) VALUES (@Id, @Name, @Url, @Sort, GETDATE(), 1, 0)", Connection.FilmLand(), new { Id = id, Name = menuSiteDTO.Name, Url = menuSiteDTO.Url, Sort = menuSiteDTO.Sort });
             if (message == "Success")
             {
                 _customLogger.SuccessDatabase(message);
@@ -48,9 +49,9 @@ namespace FilmLand.DataAccsess.Repository
             return message;
         }
 
-        public string UpdateMenuSite(MenuSiteDTO menuSiteDTO)
+        public string UpdateMenuSite(Guid id, MenuSiteDTO menuSiteDTO)
         {
-            string message = DapperEntities.ExecuteDatabase("UPDATE MenuSite SET Name = @Name, Url = @Url, Sort = @Sort, ModifiedDate = GETDATE() WHERE Id = @Id", Connection.FilmLand(), new { Id = menuSiteDTO.Id, Name = menuSiteDTO.Name, Url = menuSiteDTO.Url, Sort = menuSiteDTO.Sort });
+            string message = DapperEntities.ExecuteDatabase("UPDATE MenuSite SET Name = @Name, Url = @Url, Sort = @Sort, ModifiedDate = GETDATE() WHERE Id = @Id", Connection.FilmLand(), new { Id = id, Name = menuSiteDTO.Name, Url = menuSiteDTO.Url, Sort = menuSiteDTO.Sort });
             if (message == "Success")
             {
                 _customLogger.SuccessDatabase(message);
@@ -61,20 +62,29 @@ namespace FilmLand.DataAccsess.Repository
             }
             return message;
         }
-        public MenuSite GetMenuSite(int id)
+        public (MenuSite, string) GetMenuSite(Guid id)
         {
             (IEnumerable<MenuSite> menuSite, string message) = DapperEntities.QueryDatabase<MenuSite>("SELECT * FROM MenuSite WHERE Id = @Id", Connection.FilmLand(), new { Id = id });
             if (message == "Success")
             {
-                _customLogger.SuccessDatabase(message);
+                if (menuSite.Count() == 0)
+                {
+                    _customLogger.CustomDatabaseError("Id was not found in the database");
+                    return (null, "Not found");
+                }
+                else
+                {
+                    _customLogger.SuccessDatabase(message);
+                    return (menuSite.FirstOrDefault(), "Success");
+                }
             }
             else
             {
                 _customLogger.ErrorDatabase(message);
+                return (null, "Error");
             }
-            return menuSite.FirstOrDefault();
         }
-        public string RemoveMenuSite(int id)
+        public string RemoveMenuSite(Guid id)
         {
             string message = DapperEntities.ExecuteDatabase("DELETE FROM MenuSite WHERE Id = @Id", Connection.FilmLand(), new { Id = id });
             if (message == "Success")

@@ -13,5 +13,6 @@ namespace FilmLand.Logs
         void StartAPI(string apiName);
         void EndAPI(string apiName);
         void CustomApiError(string message);
+        void CustomDatabaseError(string message);
     }
 }

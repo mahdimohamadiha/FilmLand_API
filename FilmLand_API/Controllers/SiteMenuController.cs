@@ -57,19 +57,14 @@ namespace FilmLand_API.Controllers
             }
         }
 
-        [HttpPut("Edit/{id:int}")]
+        [HttpPut("Edit/{id:Guid}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public ActionResult PutMenuSite(int id, [FromBody] MenuSiteDTO menuSiteDTO)
+        public ActionResult PutMenuSite(Guid id, [FromBody] MenuSiteDTO menuSiteDTO)
         {
             _customLogger.StartAPI("Edit Menu Site");
-            if (id != menuSiteDTO.Id)
-            {
-                _customLogger.CustomApiError("parameter id and body id do not match");
-                return BadRequest();
-            }
-            string result = _unitOfWork.SiteMenu.UpdateMenuSite(menuSiteDTO);
+            string result = _unitOfWork.SiteMenu.UpdateMenuSite(id, menuSiteDTO);
             if (result == "Success")
             {
                 _customLogger.EndAPI("Edit Menu Site");
@@ -81,14 +76,19 @@ namespace FilmLand_API.Controllers
             }
         }
 
-        [HttpGet("{id:int}")]
+        [HttpGet("{id:Guid}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public ActionResult<MenuSite> GetMenuSite(int id)
+        public ActionResult<MenuSite> GetMenuSite(Guid id)
         {
             _customLogger.StartAPI("Get Menu Site");
-            MenuSite menuSite = _unitOfWork.SiteMenu.GetMenuSite(id);
-            if (menuSite == null)
+            (MenuSite menuSite, string message) = _unitOfWork.SiteMenu.GetMenuSite(id);
+            if (message == "Not found")
+            {
+                return StatusCode(StatusCodes.Status400BadRequest);
+            }
+            else if (message == "Error")
             {
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
@@ -99,15 +99,18 @@ namespace FilmLand_API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status201Created)]
-        [HttpDelete("{id:int}")]
-        public ActionResult DeleteMenuSite(int id)
+        [HttpDelete("{id:Guid}")]
+        public ActionResult DeleteMenuSite(Guid id)
         {
             _customLogger.StartAPI("Delete Menu Site");
-            MenuSite menuSite = _unitOfWork.SiteMenu.GetMenuSite(id);
-            if (menuSite == null)
+            (MenuSite menuSite, string message) = _unitOfWork.SiteMenu.GetMenuSite(id);
+            if (message == "Not found")
             {
-                _customLogger.CustomApiError("Id does not exist in the database");
-                return BadRequest();
+                return StatusCode(StatusCodes.Status400BadRequest);
+            }
+            else if (message == "Error")
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
             }
             string result = _unitOfWork.SiteMenu.RemoveMenuSite(id);
             if (result == "Success")

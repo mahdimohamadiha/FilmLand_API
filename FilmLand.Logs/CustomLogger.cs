@@ -30,5 +30,9 @@ namespace FilmLand.Logs
         {
             _logger.LogError($"API: {message}");
         }
+        public void CustomDatabaseError(string message)
+        {
+            _logger.LogError($"DATABASE: {message}");
+        }
     }
 }

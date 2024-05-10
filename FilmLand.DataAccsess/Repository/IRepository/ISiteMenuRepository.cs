@@ -14,10 +14,10 @@ namespace FilmLand.DataAccsess.Repository.IRepository
 
         string AddMenuSite(MenuSiteDTO menuSiteDTO);
 
-        string UpdateMenuSite(MenuSiteDTO menuSitedDTO);
+        string UpdateMenuSite(Guid id ,MenuSiteDTO menuSitedDTO);
 
-        MenuSite GetMenuSite(int id);
+        (MenuSite, string) GetMenuSite(Guid id);
 
-        string RemoveMenuSite(int id);
+        string RemoveMenuSite(Guid id);
     }
 }
