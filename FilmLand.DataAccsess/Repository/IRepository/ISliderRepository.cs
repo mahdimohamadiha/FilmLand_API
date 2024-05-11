@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FilmLand.Models.DTO;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,9 +7,8 @@ using System.Threading.Tasks;
 
 namespace FilmLand.DataAccsess.Repository.IRepository
 {
-    public interface IUnitOfWork
+    public interface ISliderRepository
     {
-        ISiteMenuRepository SiteMenu { get; }
-        ISliderRepository Slider { get; }
+        string AddSlider(SliderAndFileNameDTO sliderAndFileNameDTO);
     }
 }

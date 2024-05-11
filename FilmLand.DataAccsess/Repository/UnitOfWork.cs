@@ -15,8 +15,11 @@ namespace FilmLand.DataAccsess.Repository
         public UnitOfWork(ICustomLogger customLogger)
         {
             SiteMenu = new SiteMenuRepository(customLogger);
+            Slider = new SliderRepository(customLogger);
         }
 
         public ISiteMenuRepository SiteMenu { get; private set; }
+        public ISliderRepository Slider { get; private set; }
+
     }
 }
