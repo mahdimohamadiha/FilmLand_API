@@ -1,5 +1,6 @@
 ﻿using FilmLand.DataAccsess.Repository.IRepository;
 using FilmLand.Logs;
+using FilmLand.Models;
 using FilmLand.Models.DTO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -18,6 +19,21 @@ namespace FilmLand_API.Controllers
         {
             _unitOfWork = unitOfWork;
             _customLogger = customLogger;
+        }
+
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public ActionResult<IEnumerable<SliderAndFilePath>> GetAllMenuSite()
+        {
+            _customLogger.StartAPI("Get All Menu Site");
+            IEnumerable<SliderAndFilePath> sliderAndFilePath = _unitOfWork.Slider.GetAllSlider();
+            if (sliderAndFilePath == null)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+            _customLogger.EndAPI("Get All Menu Site");
+            return Ok(sliderAndFilePath);
         }
 
         [HttpPost("Add")]

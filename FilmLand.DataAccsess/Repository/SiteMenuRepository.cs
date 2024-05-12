@@ -22,7 +22,7 @@ namespace FilmLand.DataAccsess.Repository
         }
         public IEnumerable<MenuSite> GetAllMenuSite()
         {
-            (IEnumerable<MenuSite> menuSiteList, string message) = DapperEntities.QueryDatabase<MenuSite>("SELECT * FROM MenuSite", Connection.FilmLand());
+            (IEnumerable<MenuSite> menuSiteList, string message) = DapperEntities.QueryDatabase<MenuSite>("SELECT * FROM MenuSites", Connection.FilmLand());
             if (message == "Success")
             {
                 _customLogger.SuccessDatabase(message);
@@ -36,8 +36,8 @@ namespace FilmLand.DataAccsess.Repository
 
         public string AddMenuSite(MenuSiteDTO menuSiteDTO)
         {
-            Guid id = Guid.NewGuid();
-            string message = DapperEntities.ExecuteDatabase("INSERT INTO MenuSite (Id, Name, Url, Sort, CreateDate, IsStatus, IsDelete) VALUES (@Id, @Name, @Url, @Sort, GETDATE(), 1, 0)", Connection.FilmLand(), new { Id = id, Name = menuSiteDTO.Name, Url = menuSiteDTO.Url, Sort = menuSiteDTO.Sort });
+            Guid idMenuSite = Guid.NewGuid();
+            string message = DapperEntities.ExecuteDatabase("INSERT INTO MenuSites (MenuSiteId, MenuSiteName, MenuSiteUrl, MenuSiteSort, MenuSiteCreateDate, MenuSiteIsStatus, MenuSiteIsDelete) VALUES (@MenuSiteId, @MenuSiteName, @MenuSiteUrl, @MenuSiteSort, GETDATE(), 1, 0)", Connection.FilmLand(), new { MenuSiteId = idMenuSite, MenuSiteName = menuSiteDTO.MenuSiteName, MenuSiteUrl = menuSiteDTO.MenuSiteUrl, MenuSiteSort = menuSiteDTO.MenuSiteSort });
             if (message == "Success")
             {
                 _customLogger.SuccessDatabase(message);
@@ -49,9 +49,9 @@ namespace FilmLand.DataAccsess.Repository
             return message;
         }
 
-        public string UpdateMenuSite(Guid id, MenuSiteDTO menuSiteDTO)
+        public string UpdateMenuSite(Guid menuSiteId, MenuSiteDTO menuSiteDTO)
         {
-            string message = DapperEntities.ExecuteDatabase("UPDATE MenuSite SET Name = @Name, Url = @Url, Sort = @Sort, ModifiedDate = GETDATE() WHERE Id = @Id", Connection.FilmLand(), new { Id = id, Name = menuSiteDTO.Name, Url = menuSiteDTO.Url, Sort = menuSiteDTO.Sort });
+            string message = DapperEntities.ExecuteDatabase("UPDATE MenuSites SET MenuSiteName = @MenuSiteName, MenuSiteUrl = @MenuSiteUrl, MenuSiteSort = @MenuSiteSort, MenuSiteModifiedDate = GETDATE() WHERE MenuSiteId = @MenuSiteId", Connection.FilmLand(), new { MenuSiteId = menuSiteId, Name = menuSiteDTO.MenuSiteName, MenuSiteUrl = menuSiteDTO.MenuSiteUrl, MenuSiteSort = menuSiteDTO.MenuSiteSort });
             if (message == "Success")
             {
                 _customLogger.SuccessDatabase(message);
@@ -62,9 +62,9 @@ namespace FilmLand.DataAccsess.Repository
             }
             return message;
         }
-        public (MenuSite, string) GetMenuSite(Guid id)
+        public (MenuSite, string) GetMenuSite(Guid menuSiteId)
         {
-            (IEnumerable<MenuSite> menuSite, string message) = DapperEntities.QueryDatabase<MenuSite>("SELECT * FROM MenuSite WHERE Id = @Id", Connection.FilmLand(), new { Id = id });
+            (IEnumerable<MenuSite> menuSite, string message) = DapperEntities.QueryDatabase<MenuSite>("SELECT * FROM MenuSites WHERE MenuSiteId = @MenuSiteId", Connection.FilmLand(), new { MenuSiteId = menuSiteId });
             if (message == "Success")
             {
                 if (menuSite.Count() == 0)
@@ -84,9 +84,9 @@ namespace FilmLand.DataAccsess.Repository
                 return (null, "Error");
             }
         }
-        public string RemoveMenuSite(Guid id)
+        public string RemoveMenuSite(Guid menuSiteId)
         {
-            string message = DapperEntities.ExecuteDatabase("DELETE FROM MenuSite WHERE Id = @Id", Connection.FilmLand(), new { Id = id });
+            string message = DapperEntities.ExecuteDatabase("DELETE FROM MenuSites WHERE MenuSiteId = @MenuSiteId", Connection.FilmLand(), new { MenuSiteId = menuSiteId });
             if (message == "Success")
             {
                 _customLogger.SuccessDatabase(message);

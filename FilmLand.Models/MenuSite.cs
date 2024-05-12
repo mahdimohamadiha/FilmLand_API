@@ -2,13 +2,13 @@
 {
     public class MenuSite
     {
-        public Guid Id { get; set; }
-        public string Name { get; set; }
-        public string Url { get; set; }
-        public int Sort { get; set; }
-        public DateTime CreateDate { get; set; }
-        public DateTime ModifiedDate { get; set; }
-        public bool IsStatus { get; set; }
-        public bool IsDelete { get; set; }
+        public Guid MenuSiteId { get; set; }
+        public string MenuSiteName { get; set; }
+        public string MenuSiteUrl { get; set; }
+        public int MenuSiteSort { get; set; }
+        public DateTime MenuSiteCreateDate { get; set; }
+        public DateTime MenuSiteModifiedDate { get; set; }
+        public bool MenuSiteIsStatus { get; set; }
+        public bool MenuSiteIsDelete { get; set; }
     }
 }

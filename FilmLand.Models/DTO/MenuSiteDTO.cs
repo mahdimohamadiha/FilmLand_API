@@ -2,8 +2,8 @@
 {
     public class MenuSiteDTO
     {
-        public string Name { get; set; }
-        public string Url { get; set; }
-        public int Sort { get; set; }
+        public string MenuSiteName { get; set; }
+        public string MenuSiteUrl { get; set; }
+        public int MenuSiteSort { get; set; }
     }
 }
