@@ -97,5 +97,25 @@ namespace FilmLand.DataAccsess.Repository
             }
             return message;
         }
+        public string ChangeStatus(Guid menuSiteId)
+        {
+            string message = DapperEntities.ExecuteDatabase(@"UPDATE MenuSites
+                                                              SET MenuSiteIsStatus = 
+                                                                  CASE 
+                                                                      WHEN MenuSiteIsStatus = 1 THEN 0
+                                                                      WHEN MenuSiteIsStatus = 0 THEN 1
+                                                                  END
+                                                              WHERE MenuSiteId = @MenuSiteId;", 
+                                                              Connection.FilmLand(), new { MenuSiteId = menuSiteId });
+            if (message == "Success")
+            {
+                _customLogger.SuccessDatabase(message);
+            }
+            else
+            {
+                _customLogger.ErrorDatabase(message);
+            }
+            return message;
+        }
     }
 }

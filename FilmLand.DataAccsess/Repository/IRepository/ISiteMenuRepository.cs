@@ -19,5 +19,7 @@ namespace FilmLand.DataAccsess.Repository.IRepository
         (MenuSite, string) GetMenuSite(Guid id);
 
         string RemoveMenuSite(Guid id);
+
+        string ChangeStatus(Guid menuSiteId);
     }
 }

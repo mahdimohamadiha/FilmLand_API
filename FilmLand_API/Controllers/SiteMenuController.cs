@@ -123,5 +123,33 @@ namespace FilmLand_API.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
+
+        [HttpGet("ChangeStatus/{id:Guid}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public ActionResult ChangeStatus(Guid id)
+        {
+            _customLogger.StartAPI("Change Status");
+            (MenuSite menuSite, string message) = _unitOfWork.SiteMenu.GetMenuSite(id);
+            if (message == "Not found")
+            {
+                return StatusCode(StatusCodes.Status400BadRequest);
+            }
+            else if (message == "Error")
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+            message = _unitOfWork.SiteMenu.ChangeStatus(id);
+            if (message == "Success")
+            {
+                _customLogger.EndAPI("Change Status");
+                return StatusCode(StatusCodes.Status200OK);
+            }
+            else
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
     }
 }
