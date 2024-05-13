@@ -22,7 +22,7 @@ namespace FilmLand.DataAccsess.Repository
         }
         public IEnumerable<MenuSite> GetAllMenuSite()
         {
-            (IEnumerable<MenuSite> menuSiteList, string message) = DapperEntities.QueryDatabase<MenuSite>("SELECT * FROM MenuSites", Connection.FilmLand());
+            (IEnumerable<MenuSite> menuSiteList, string message) = DapperEntities.QueryDatabase<MenuSite>("SELECT * FROM MenuSites ORDER BY MenuSiteSort", Connection.FilmLand());
             if (message == "Success")
             {
                 _customLogger.SuccessDatabase(message);
