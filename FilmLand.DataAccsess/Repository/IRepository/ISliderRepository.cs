@@ -10,8 +10,10 @@ namespace FilmLand.DataAccsess.Repository.IRepository
 {
     public interface ISliderRepository
     {
-        string AddSlider(SliderAndFileNameDTO sliderAndFileNameDTO);
+        string AddSlider(SliderAndFileDTO sliderAndFileNameDTO);
 
         IEnumerable<SliderAndFilePath> GetAllSlider();
+
+        string UpdateSlider(Guid sliderId, SliderAndFileDTO sliderAndFileDTO);
     }
 }

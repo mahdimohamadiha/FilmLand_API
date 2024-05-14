@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace FilmLand.Models.DTO
 {
-    public class SliderAndFileNameDTO
+    public class SliderAndFileDTO
     {
         public string SliderName { get; set; }
         public string SliderUrl { get; set; }
