@@ -10,15 +10,15 @@ namespace FilmLand.DataAccsess.Repository.IRepository
 {
     public interface ISiteMenuRepository
     {
-        IEnumerable<MenuSite> GetAllMenuSite();
+        IEnumerable<SiteMenu> GetAllSiteMenu();
 
-        string AddMenuSite(MenuSiteDTO menuSiteDTO);
+        string AddSiteMenu(SiteMenuDTO menuSiteDTO);
 
-        string UpdateMenuSite(Guid id ,MenuSiteDTO menuSitedDTO);
+        string UpdateSiteMenu(Guid id ,SiteMenuDTO menuSitedDTO);
 
-        (MenuSite, string) GetMenuSite(Guid id);
+        (SiteMenu, string) GetSiteMenu(Guid id);
 
-        string RemoveMenuSite(Guid id);
+        string RemoveSiteMenu(Guid id);
 
         string ChangeStatus(Guid menuSiteId);
     }

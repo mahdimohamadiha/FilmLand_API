@@ -20,9 +20,9 @@ namespace FilmLand.DataAccsess.Repository
         {
             _customLogger = customLogger;
         }
-        public IEnumerable<MenuSite> GetAllMenuSite()
+        public IEnumerable<SiteMenu> GetAllSiteMenu()
         {
-            (IEnumerable<MenuSite> menuSiteList, string message) = DapperEntities.QueryDatabase<MenuSite>("SELECT * FROM MenuSites ORDER BY MenuSiteSort", Connection.FilmLand());
+            (IEnumerable<SiteMenu> siteMenuList, string message) = DapperEntities.QueryDatabase<SiteMenu>("SELECT * FROM SiteMenu ORDER BY SiteMenuSort", Connection.FilmLand());
             if (message == "Success")
             {
                 _customLogger.SuccessDatabase(message);
@@ -31,13 +31,13 @@ namespace FilmLand.DataAccsess.Repository
             {
                 _customLogger.ErrorDatabase(message);
             }
-            return menuSiteList;
+            return siteMenuList;
         }
 
-        public string AddMenuSite(MenuSiteDTO menuSiteDTO)
+        public string AddSiteMenu(SiteMenuDTO siteMenuDTO)
         {
-            Guid idMenuSite = Guid.NewGuid();
-            string message = DapperEntities.ExecuteDatabase("INSERT INTO MenuSites (MenuSiteId, MenuSiteName, MenuSiteUrl, MenuSiteSort, MenuSiteCreateDate, MenuSiteIsStatus, MenuSiteIsDelete) VALUES (@MenuSiteId, @MenuSiteName, @MenuSiteUrl, @MenuSiteSort, GETDATE(), 1, 0)", Connection.FilmLand(), new { MenuSiteId = idMenuSite, MenuSiteName = menuSiteDTO.MenuSiteName, MenuSiteUrl = menuSiteDTO.MenuSiteUrl, MenuSiteSort = menuSiteDTO.MenuSiteSort });
+            Guid idSiteMenu = Guid.NewGuid();
+            string message = DapperEntities.ExecuteDatabase("INSERT INTO SiteMenu (SiteMenuId, SiteMenuName, SiteMenuUrl, SiteMenuSort, SiteMenuCreateDate, SiteMenuIsStatus, SiteMenuIsDelete) VALUES (@SiteMenuId, @SiteMenuName, @SiteMenuUrl, @SiteMenuSort, GETDATE(), 1, 0)", Connection.FilmLand(), new { SiteMenuId = idSiteMenu, SiteMenuName = siteMenuDTO.SiteMenuName, SiteMenuUrl = siteMenuDTO.SiteMenuUrl, SiteMenuSort = siteMenuDTO.SiteMenuSort });
             if (message == "Success")
             {
                 _customLogger.SuccessDatabase(message);
@@ -49,9 +49,9 @@ namespace FilmLand.DataAccsess.Repository
             return message;
         }
 
-        public string UpdateMenuSite(Guid menuSiteId, MenuSiteDTO menuSiteDTO)
+        public string UpdateSiteMenu(Guid siteMenuId, SiteMenuDTO siteMenuDTO)
         {
-            string message = DapperEntities.ExecuteDatabase("UPDATE MenuSites SET MenuSiteName = @MenuSiteName, MenuSiteUrl = @MenuSiteUrl, MenuSiteSort = @MenuSiteSort, MenuSiteModifiedDate = GETDATE() WHERE MenuSiteId = @MenuSiteId", Connection.FilmLand(), new { MenuSiteId = menuSiteId, Name = menuSiteDTO.MenuSiteName, MenuSiteUrl = menuSiteDTO.MenuSiteUrl, MenuSiteSort = menuSiteDTO.MenuSiteSort });
+            string message = DapperEntities.ExecuteDatabase("UPDATE SiteMenu SET SiteMenuName = @SiteMenuName, SiteMenuUrl = @SiteMenuUrl, SiteMenuSort = @SiteMenuSort, SiteMenuModifiedDate = GETDATE() WHERE SiteMenuId = @SiteMenuId", Connection.FilmLand(), new { SiteMenuId = siteMenuId, SiteMenuName = siteMenuDTO.SiteMenuName, SiteMenuUrl = siteMenuDTO.SiteMenuUrl, SiteMenuSort = siteMenuDTO.SiteMenuSort });
             if (message == "Success")
             {
                 _customLogger.SuccessDatabase(message);
@@ -62,12 +62,12 @@ namespace FilmLand.DataAccsess.Repository
             }
             return message;
         }
-        public (MenuSite, string) GetMenuSite(Guid menuSiteId)
+        public (SiteMenu, string) GetSiteMenu(Guid siteMenuId)
         {
-            (IEnumerable<MenuSite> menuSite, string message) = DapperEntities.QueryDatabase<MenuSite>("SELECT * FROM MenuSites WHERE MenuSiteId = @MenuSiteId", Connection.FilmLand(), new { MenuSiteId = menuSiteId });
+            (IEnumerable<SiteMenu> siteMenu, string message) = DapperEntities.QueryDatabase<SiteMenu>("SELECT * FROM SiteMenu WHERE SiteMenuId = @SiteMenuId", Connection.FilmLand(), new { SiteMenuId = siteMenuId });
             if (message == "Success")
             {
-                if (menuSite.Count() == 0)
+                if (siteMenu.Count() == 0)
                 {
                     _customLogger.CustomDatabaseError("Id was not found in the database");
                     return (null, "Not found");
@@ -75,7 +75,7 @@ namespace FilmLand.DataAccsess.Repository
                 else
                 {
                     _customLogger.SuccessDatabase(message);
-                    return (menuSite.FirstOrDefault(), "Success");
+                    return (siteMenu.FirstOrDefault(), "Success");
                 }
             }
             else
@@ -84,9 +84,9 @@ namespace FilmLand.DataAccsess.Repository
                 return (null, "Error");
             }
         }
-        public string RemoveMenuSite(Guid menuSiteId)
+        public string RemoveSiteMenu(Guid siteMenuId)
         {
-            string message = DapperEntities.ExecuteDatabase("DELETE FROM MenuSites WHERE MenuSiteId = @MenuSiteId", Connection.FilmLand(), new { MenuSiteId = menuSiteId });
+            string message = DapperEntities.ExecuteDatabase("DELETE FROM SiteMenu WHERE SiteMenuId = @SiteMenuId", Connection.FilmLand(), new { SiteMenuId = siteMenuId });
             if (message == "Success")
             {
                 _customLogger.SuccessDatabase(message);
@@ -97,16 +97,16 @@ namespace FilmLand.DataAccsess.Repository
             }
             return message;
         }
-        public string ChangeStatus(Guid menuSiteId)
+        public string ChangeStatus(Guid siteMenuId)
         {
-            string message = DapperEntities.ExecuteDatabase(@"UPDATE MenuSites
-                                                              SET MenuSiteIsStatus = 
+            string message = DapperEntities.ExecuteDatabase(@"UPDATE SiteMenu
+                                                              SET SiteMenuIsStatus = 
                                                                   CASE 
-                                                                      WHEN MenuSiteIsStatus = 1 THEN 0
-                                                                      WHEN MenuSiteIsStatus = 0 THEN 1
+                                                                      WHEN SiteMenuIsStatus = 1 THEN 0
+                                                                      WHEN SiteMenuIsStatus = 0 THEN 1
                                                                   END
-                                                              WHERE MenuSiteId = @MenuSiteId;", 
-                                                              Connection.FilmLand(), new { MenuSiteId = menuSiteId });
+                                                              WHERE SiteMenuId = @SiteMenuId;", 
+                                                              Connection.FilmLand(), new { SiteMenuId = siteMenuId });
             if (message == "Success")
             {
                 _customLogger.SuccessDatabase(message);

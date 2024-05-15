@@ -24,10 +24,10 @@ namespace FilmLand_API.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public ActionResult<IEnumerable<SliderAndFilePath>> GetAllSlider()
+        public ActionResult<IEnumerable<SlidersAndFiles>> GetAllSlider()
         {
             _customLogger.StartAPI("Get All Slider");
-            IEnumerable<SliderAndFilePath> sliderAndFilePath = _unitOfWork.Slider.GetAllSlider();
+            IEnumerable<SlidersAndFiles> sliderAndFilePath = _unitOfWork.Slider.GetAllSlider();
             if (sliderAndFilePath == null)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError);
@@ -67,6 +67,82 @@ namespace FilmLand_API.Controllers
             {
                 _customLogger.EndAPI("Edit Slider");
                 return NoContent();
+            }
+            else
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpGet("{id:Guid}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public ActionResult<SlidersAndFiles> GetSlider(Guid id)
+        {
+            _customLogger.StartAPI("Get Slider");
+            (SlidersAndFiles slidersAndFiles, string message) = _unitOfWork.Slider.GetSlider(id);
+            if (message == "Not found")
+            {
+                return StatusCode(StatusCodes.Status400BadRequest);
+            }
+            else if (message == "Error")
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+            _customLogger.EndAPI("Get Slider");
+            return Ok(slidersAndFiles);
+        }
+
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [HttpDelete("{id:Guid}")]
+        public ActionResult DeleteSlider(Guid id)
+        {
+            _customLogger.StartAPI("Delete Slider");
+            (SlidersAndFiles slidersAndFiles, string message) = _unitOfWork.Slider.GetSlider(id);
+            if (message == "Not found")
+            {
+                return StatusCode(StatusCodes.Status400BadRequest);
+            }
+            else if (message == "Error")
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+            string result = _unitOfWork.Slider.RemoveSlider(id);
+            if (result == "Success")
+            {
+                _customLogger.EndAPI("Delete Slider");
+                return StatusCode(StatusCodes.Status200OK);
+            }
+            else
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpGet("ChangeStatus/{id:Guid}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public ActionResult ChangeStatus(Guid id)
+        {
+            _customLogger.StartAPI("Change Status");
+            (SlidersAndFiles slidersAndFiles, string message) = _unitOfWork.Slider.GetSlider(id);
+            if (message == "Not found")
+            {
+                return StatusCode(StatusCodes.Status400BadRequest);
+            }
+            else if (message == "Error")
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+            message = _unitOfWork.Slider.ChangeStatus(id);
+            if (message == "Success")
+            {
+                _customLogger.EndAPI("Change Status");
+                return StatusCode(StatusCodes.Status200OK);
             }
             else
             {
