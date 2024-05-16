@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace FilmLand.Models
 {
-    public class Files
+    public class File
     {
         public Guid FileId { get; set; }
         public string FileName { get; set; }

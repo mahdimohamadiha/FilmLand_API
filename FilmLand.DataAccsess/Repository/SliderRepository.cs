@@ -18,9 +18,9 @@ namespace FilmLand.DataAccsess.Repository
         {
             _customLogger = customLogger;
         }
-        public IEnumerable<SlidersAndFiles> GetAllSlider()
+        public IEnumerable<SliderAndFile> GetAllSlider()
         {
-            (IEnumerable<SlidersAndFiles> slidersAndFiles, string message) = DapperEntities.QueryDatabase<SlidersAndFiles>("SELECT * FROM Sliders join Files on FileRef = FileId", Connection.FilmLand());
+            (IEnumerable<SliderAndFile> sliderAndFile, string message) = DapperEntities.QueryDatabase<SliderAndFile>("SELECT * FROM Slider join [File] on FileRef = FileId WHERE SliderIsDelete = 0 ORDER BY SliderSort", Connection.FilmLand());
             if (message == "Success")
             {
                 _customLogger.SuccessDatabase(message);
@@ -29,15 +29,15 @@ namespace FilmLand.DataAccsess.Repository
             {
                 _customLogger.ErrorDatabase(message);
             }
-            return slidersAndFiles;
+            return sliderAndFile;
         }
-        public string AddSlider(SliderAndFileDTO sliderAndFileNameDTO)
+        public string AddSlider(SliderAndFileDTO sliderAndFileDTO)
         {
-            Guid filePathId = Guid.NewGuid();
+            Guid fileId = Guid.NewGuid();
             Guid sliderId = Guid.NewGuid();
             string message = DapperEntities.ExecuteDatabase(@"
-                INSERT INTO Files (FileId, FileName, FilePath, FileExtension, FileCreateDate, FileIsDelete) VALUES (@FileId, @FileName, @FilePath, @FileExtension, GETDATE(), 0); INSERT INTO Sliders (SliderId, SliderName, SliderUrl, SliderSort, FileRef, SliderCreateDate, SliderIsStatus, SliderIsDelete) VALUES (@SliderId, @SliderName, @SliderUrl, @SliderSort, @FileRef, GETDATE(), 1, 0)", 
-                Connection.FilmLand(), new { FileId = filePathId, FileName = sliderAndFileNameDTO.FileName, FilePath = sliderAndFileNameDTO.FilePath, FileExtension = sliderAndFileNameDTO.FileExtension, SliderId = sliderId, SliderName = sliderAndFileNameDTO.SliderName, SliderUrl = sliderAndFileNameDTO.SliderUrl, SliderSort = sliderAndFileNameDTO.SliderSort, FileRef = filePathId });
+                INSERT INTO [File] (FileId, FileName, FilePath, FileExtension, FileCreateDate, FileIsDelete) VALUES (@FileId, @FileName, @FilePath, @FileExtension, GETDATE(), 0); INSERT INTO Slider (SliderId, SliderName, SliderUrl, SliderSort, FileRef, SliderCreateDate, SliderIsStatus, SliderIsDelete) VALUES (@SliderId, @SliderName, @SliderUrl, @SliderSort, @FileRef, GETDATE(), 1, 0)", 
+                Connection.FilmLand(), new { FileId = fileId, FileName = sliderAndFileDTO.FileName, FilePath = sliderAndFileDTO.FilePath, FileExtension = sliderAndFileDTO.FileExtension, SliderId = sliderId, SliderName = sliderAndFileDTO.SliderName, SliderUrl = sliderAndFileDTO.SliderUrl, SliderSort = sliderAndFileDTO.SliderSort, FileRef = fileId });
             if (message == "Success")
             {
                 _customLogger.SuccessDatabase(message);
@@ -50,7 +50,7 @@ namespace FilmLand.DataAccsess.Repository
         }
         public string UpdateSlider(Guid sliderId, SliderAndFileDTO sliderAndFileDTO)
         {
-            (IEnumerable<Sliders> sliders, string message) = DapperEntities.QueryDatabase<Sliders>("SELECT * FROM Sliders WHERE SliderId = @SliderId", Connection.FilmLand(), new { SliderId = sliderId });
+            (IEnumerable<Slider> sliders, string message) = DapperEntities.QueryDatabase<Slider>("SELECT * FROM Slider WHERE SliderId = @SliderId", Connection.FilmLand(), new { SliderId = sliderId });
             if (message == "Success")
             {
                 _customLogger.SuccessDatabase(message);
@@ -60,7 +60,7 @@ namespace FilmLand.DataAccsess.Repository
                 _customLogger.ErrorDatabase(message);
                 return message;
             }
-            message = DapperEntities.ExecuteDatabase("UPDATE Files SET FileName = @FileName, FilePath = @FilePath, FileExtension = @FileExtension, FileModifiedDate = GETDATE() WHERE FileId = @FileId; UPDATE Sliders SET SliderName = @SliderName, SliderUrl = @SliderUrl, SliderSort = @SliderSort, SliderModifiedDate = GETDATE() WHERE SliderId = @SliderId", 
+            message = DapperEntities.ExecuteDatabase("UPDATE [File] SET FileName = @FileName, FilePath = @FilePath, FileExtension = @FileExtension, FileModifiedDate = GETDATE() WHERE FileId = @FileId; UPDATE Slider SET SliderName = @SliderName, SliderUrl = @SliderUrl, SliderSort = @SliderSort, SliderModifiedDate = GETDATE() WHERE SliderId = @SliderId", 
                 Connection.FilmLand(), new { FileName = sliderAndFileDTO.FileName, FilePath = sliderAndFileDTO.FilePath, FileExtension = sliderAndFileDTO.FileExtension, FileId = sliders.FirstOrDefault().FileRef, SliderName = sliderAndFileDTO.SliderName, SliderUrl = sliderAndFileDTO.SliderUrl, SliderSort = sliderAndFileDTO.SliderSort, SliderId = sliderId });
             if (message == "Success")
             {
@@ -72,12 +72,12 @@ namespace FilmLand.DataAccsess.Repository
             }
             return message;
         }
-        public (SlidersAndFiles, string) GetSlider(Guid sliderId)
+        public (SliderAndFile, string) GetSlider(Guid sliderId)
         {
-            (IEnumerable<SlidersAndFiles> slidersAndFiles, string message) = DapperEntities.QueryDatabase<SlidersAndFiles>("SELECT * FROM Sliders join Files on FileRef = FileId WHERE SliderId = @SliderId", Connection.FilmLand(), new { SliderId = sliderId });
+            (IEnumerable<SliderAndFile> sliderAndFileList, string message) = DapperEntities.QueryDatabase<SliderAndFile>("SELECT * FROM Slider join [File] on FileRef = FileId WHERE SliderId = @SliderId", Connection.FilmLand(), new { SliderId = sliderId });
             if (message == "Success")
             {
-                if (slidersAndFiles.Count() == 0)
+                if (sliderAndFileList.Count() == 0)
                 {
                     _customLogger.CustomDatabaseError("Id was not found in the database");
                     return (null, "Not found");
@@ -85,7 +85,7 @@ namespace FilmLand.DataAccsess.Repository
                 else
                 {
                     _customLogger.SuccessDatabase(message);
-                    return (slidersAndFiles.FirstOrDefault(), "Success");
+                    return (sliderAndFileList.FirstOrDefault(), "Success");
                 }
             }
             else
@@ -96,7 +96,17 @@ namespace FilmLand.DataAccsess.Repository
         }
         public string RemoveSlider(Guid sliderId)
         {
-            string message = DapperEntities.ExecuteDatabase("DELETE FROM Sliders WHERE SliderId = @SliderId", Connection.FilmLand(), new { SliderId = sliderId });
+            (IEnumerable<Slider> sliders, string message) = DapperEntities.QueryDatabase<Slider>("SELECT * FROM Slider WHERE SliderId = @SliderId", Connection.FilmLand(), new { SliderId = sliderId });
+            if (message == "Success")
+            {
+                _customLogger.SuccessDatabase(message);
+            }
+            else
+            {
+                _customLogger.ErrorDatabase(message);
+                return message;
+            }
+            message = DapperEntities.ExecuteDatabase("UPDATE Slider SET SliderIsDelete = 1 WHERE SliderId = @SliderId; UPDATE [File] SET FileIsDelete = 1 WHERE FileId = @FileId", Connection.FilmLand(), new { SliderId = sliderId, FileId = sliders.FirstOrDefault().FileRef });;
             if (message == "Success")
             {
                 _customLogger.SuccessDatabase(message);
@@ -109,7 +119,7 @@ namespace FilmLand.DataAccsess.Repository
         }
         public string ChangeStatus(Guid sliderId)
         {
-            string message = DapperEntities.ExecuteDatabase(@"UPDATE Sliders
+            string message = DapperEntities.ExecuteDatabase(@"UPDATE Slider
                                                               SET SliderIsStatus = 
                                                                   CASE 
                                                                       WHEN SliderIsStatus = 1 THEN 0

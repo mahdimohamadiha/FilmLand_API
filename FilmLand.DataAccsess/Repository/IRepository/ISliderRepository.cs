@@ -12,11 +12,11 @@ namespace FilmLand.DataAccsess.Repository.IRepository
     {
         string AddSlider(SliderAndFileDTO sliderAndFileNameDTO);
 
-        IEnumerable<SlidersAndFiles> GetAllSlider();
+        IEnumerable<SliderAndFile> GetAllSlider();
 
         string UpdateSlider(Guid sliderId, SliderAndFileDTO sliderAndFileDTO);
 
-        (SlidersAndFiles, string) GetSlider(Guid sliderId);
+        (SliderAndFile, string) GetSlider(Guid sliderId);
 
         string RemoveSlider(Guid sliderId);
 

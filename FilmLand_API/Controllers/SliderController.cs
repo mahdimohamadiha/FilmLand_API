@@ -24,26 +24,26 @@ namespace FilmLand_API.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public ActionResult<IEnumerable<SlidersAndFiles>> GetAllSlider()
+        public ActionResult<IEnumerable<SliderAndFile>> GetAllSlider()
         {
             _customLogger.StartAPI("Get All Slider");
-            IEnumerable<SlidersAndFiles> sliderAndFilePath = _unitOfWork.Slider.GetAllSlider();
-            if (sliderAndFilePath == null)
+            IEnumerable<SliderAndFile> sliderAndFile = _unitOfWork.Slider.GetAllSlider();
+            if (sliderAndFile == null)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
             _customLogger.EndAPI("Get All Slider");
-            return Ok(sliderAndFilePath);
+            return Ok(sliderAndFile);
         }
 
         [HttpPost("Add")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public ActionResult PostSlider([FromBody] SliderAndFileDTO sliderAndFileNameDTO)
+        public ActionResult PostSlider([FromBody] SliderAndFileDTO sliderAndFileDTO)
         {
             _customLogger.StartAPI("Add Slider");
-            string result = _unitOfWork.Slider.AddSlider(sliderAndFileNameDTO);
+            string result = _unitOfWork.Slider.AddSlider(sliderAndFileDTO);
             if (result == "Success")
             {
                 _customLogger.EndAPI("Add Slider");
@@ -78,10 +78,10 @@ namespace FilmLand_API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public ActionResult<SlidersAndFiles> GetSlider(Guid id)
+        public ActionResult<SliderAndFile> GetSlider(Guid id)
         {
             _customLogger.StartAPI("Get Slider");
-            (SlidersAndFiles slidersAndFiles, string message) = _unitOfWork.Slider.GetSlider(id);
+            (SliderAndFile sliderAndFile, string message) = _unitOfWork.Slider.GetSlider(id);
             if (message == "Not found")
             {
                 return StatusCode(StatusCodes.Status400BadRequest);
@@ -91,7 +91,7 @@ namespace FilmLand_API.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
             _customLogger.EndAPI("Get Slider");
-            return Ok(slidersAndFiles);
+            return Ok(sliderAndFile);
         }
 
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -101,7 +101,7 @@ namespace FilmLand_API.Controllers
         public ActionResult DeleteSlider(Guid id)
         {
             _customLogger.StartAPI("Delete Slider");
-            (SlidersAndFiles slidersAndFiles, string message) = _unitOfWork.Slider.GetSlider(id);
+            (SliderAndFile sliderAndFile, string message) = _unitOfWork.Slider.GetSlider(id);
             if (message == "Not found")
             {
                 return StatusCode(StatusCodes.Status400BadRequest);
@@ -129,7 +129,7 @@ namespace FilmLand_API.Controllers
         public ActionResult ChangeStatus(Guid id)
         {
             _customLogger.StartAPI("Change Status");
-            (SlidersAndFiles slidersAndFiles, string message) = _unitOfWork.Slider.GetSlider(id);
+            (SliderAndFile sliderAndFile, string message) = _unitOfWork.Slider.GetSlider(id);
             if (message == "Not found")
             {
                 return StatusCode(StatusCodes.Status400BadRequest);

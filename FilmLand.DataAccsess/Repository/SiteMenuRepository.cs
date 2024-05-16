@@ -22,7 +22,7 @@ namespace FilmLand.DataAccsess.Repository
         }
         public IEnumerable<SiteMenu> GetAllSiteMenu()
         {
-            (IEnumerable<SiteMenu> siteMenuList, string message) = DapperEntities.QueryDatabase<SiteMenu>("SELECT * FROM SiteMenu ORDER BY SiteMenuSort", Connection.FilmLand());
+            (IEnumerable<SiteMenu> siteMenuList, string message) = DapperEntities.QueryDatabase<SiteMenu>("SELECT * FROM SiteMenu WHERE SiteMenuIsDelete = 0 ORDER BY SiteMenuSort", Connection.FilmLand());
             if (message == "Success")
             {
                 _customLogger.SuccessDatabase(message);
@@ -86,7 +86,7 @@ namespace FilmLand.DataAccsess.Repository
         }
         public string RemoveSiteMenu(Guid siteMenuId)
         {
-            string message = DapperEntities.ExecuteDatabase("DELETE FROM SiteMenu WHERE SiteMenuId = @SiteMenuId", Connection.FilmLand(), new { SiteMenuId = siteMenuId });
+            string message = DapperEntities.ExecuteDatabase("UPDATE SiteMenu SET SiteMenuIsDelete = 1 WHERE SiteMenuId = @SiteMenuId", Connection.FilmLand(), new { SiteMenuId = siteMenuId });
             if (message == "Success")
             {
                 _customLogger.SuccessDatabase(message);
