@@ -52,8 +52,8 @@ namespace FilmLand_API.Controllers
             {
                 await sliderDTO.File.CopyToAsync(stream);
             }
-
             var fileName = Path.GetFileName(sliderDTO.File.FileName);
+            var FileNameWithoutExtension = Path.GetFileNameWithoutExtension(sliderDTO.File.FileName);
             var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "slider");  // Example path
             var fileExtension = Path.GetExtension(fileName);
 
@@ -62,7 +62,7 @@ namespace FilmLand_API.Controllers
                 SliderName = sliderDTO.SliderName,
                 SliderUrl = sliderDTO.SliderUrl,
                 SliderSort = sliderDTO.SliderSort,
-                FileName = fileName,
+                FileName = FileNameWithoutExtension,
                 FilePath = filePath,
                 FileExtension = fileExtension
             };
