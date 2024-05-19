@@ -21,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\slider\" />
+    <Folder Include="wwwroot\Slider\" />
   </ItemGroup>
 
 </Project>

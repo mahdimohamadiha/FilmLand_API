@@ -54,7 +54,7 @@ namespace FilmLand_API.Controllers
             }
             var fileName = Path.GetFileName(sliderDTO.File.FileName);
             var FileNameWithoutExtension = Path.GetFileNameWithoutExtension(sliderDTO.File.FileName);
-            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "slider");  // Example path
+            var filePath = "Slider";  
             var fileExtension = Path.GetExtension(fileName);
 
             SliderAndFileDTO sliderAndFileDTO = new SliderAndFileDTO
