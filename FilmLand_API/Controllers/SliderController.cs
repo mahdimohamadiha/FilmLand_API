@@ -40,7 +40,7 @@ namespace FilmLand_API.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> PostSlider([FromBody] SliderDTO sliderDTO)
+        public async Task<IActionResult> PostSlider([FromForm] SliderDTO sliderDTO)
         {
             _customLogger.StartAPI("Add Slider");
             if (sliderDTO.File == null || sliderDTO.File.Length == 0)
