@@ -40,9 +40,32 @@ namespace FilmLand_API.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public ActionResult PostSlider([FromBody] SliderAndFileDTO sliderAndFileDTO)
+        public async Task<IActionResult> PostSlider([FromBody] SliderDTO sliderDTO)
         {
             _customLogger.StartAPI("Add Slider");
+            if (sliderDTO.File == null || sliderDTO.File.Length == 0)
+            {
+                return BadRequest(new { success = false, message = "No file uploaded" });
+            }
+            var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "slider", sliderDTO.File.FileName);
+            using (var stream = new FileStream(path, FileMode.Create))
+            {
+                await sliderDTO.File.CopyToAsync(stream);
+            }
+
+            var fileName = Path.GetFileName(sliderDTO.File.FileName);
+            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "slider");  // Example path
+            var fileExtension = Path.GetExtension(fileName);
+
+            SliderAndFileDTO sliderAndFileDTO = new SliderAndFileDTO
+            {
+                SliderName = sliderDTO.SliderName,
+                SliderUrl = sliderDTO.SliderUrl,
+                SliderSort = sliderDTO.SliderSort,
+                FileName = fileName,
+                FilePath = filePath,
+                FileExtension = fileExtension
+            };
             string result = _unitOfWork.Slider.AddSlider(sliderAndFileDTO);
             if (result == "Success")
             {

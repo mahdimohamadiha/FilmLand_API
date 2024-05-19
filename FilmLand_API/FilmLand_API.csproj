@@ -20,4 +20,8 @@
     <ProjectReference Include="..\FilmLand.Models\FilmLand.Models.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\slider\" />
+  </ItemGroup>
+
 </Project>
