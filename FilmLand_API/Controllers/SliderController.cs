@@ -82,9 +82,33 @@ namespace FilmLand_API.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public ActionResult PutSlider(Guid id, [FromBody] SliderAndFileDTO sliderAndFileDTO)
+        public async Task<IActionResult> PutSlider(Guid id, [FromForm] SliderDTO sliderDTO)
         {
             _customLogger.StartAPI("Edit Slider");
+            if (sliderDTO.File == null || sliderDTO.File.Length == 0)
+            {
+                _customLogger.CustomApiError("No file uploaded");
+                return StatusCode(StatusCodes.Status400BadRequest);
+            }
+            var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "slider", sliderDTO.File.FileName);
+            using (var stream = new FileStream(path, FileMode.Create))
+            {
+                await sliderDTO.File.CopyToAsync(stream);
+            }
+            var fileName = Path.GetFileName(sliderDTO.File.FileName);
+            var FileNameWithoutExtension = Path.GetFileNameWithoutExtension(sliderDTO.File.FileName);
+            var filePath = "/Slider/";
+            var fileExtension = Path.GetExtension(fileName);
+
+            SliderAndFileDTO sliderAndFileDTO = new SliderAndFileDTO
+            {
+                SliderName = sliderDTO.SliderName,
+                SliderUrl = sliderDTO.SliderUrl,
+                SliderSort = sliderDTO.SliderSort,
+                FileName = FileNameWithoutExtension,
+                FilePath = filePath,
+                FileExtension = fileExtension
+            };
             string result = _unitOfWork.Slider.UpdateSlider(id, sliderAndFileDTO);
             if (result == "Success")
             {
