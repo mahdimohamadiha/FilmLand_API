@@ -64,6 +64,15 @@ namespace FilmLand_API.Controllers
         public ActionResult PutSiteMenu(Guid id, [FromBody] SiteMenuDTO siteMenuDTO)
         {
             _customLogger.StartAPI("Edit Site Menu");
+            (SiteMenu siteMenu, string message) = _unitOfWork.SiteMenu.GetSiteMenu(id);
+            if (message == "Not found")
+            {
+                return StatusCode(StatusCodes.Status400BadRequest);
+            }
+            else if (message == "Error")
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
             string result = _unitOfWork.SiteMenu.UpdateSiteMenu(id, siteMenuDTO);
             if (result == "Success")
             {

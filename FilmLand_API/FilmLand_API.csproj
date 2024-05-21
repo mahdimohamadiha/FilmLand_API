@@ -21,6 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="wwwroot\MiniBanner\" />
     <Folder Include="wwwroot\Slider\" />
   </ItemGroup>
 

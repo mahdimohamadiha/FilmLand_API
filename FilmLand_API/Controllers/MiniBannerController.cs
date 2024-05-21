@@ -9,13 +9,13 @@ namespace FilmLand_API.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    public class SliderController : ControllerBase
+    public class MiniBannerController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;
 
         private readonly ICustomLogger _customLogger;
 
-        public SliderController(IUnitOfWork unitOfWork, ICustomLogger customLogger)
+        public MiniBannerController(IUnitOfWork unitOfWork, ICustomLogger customLogger)
         {
             _unitOfWork = unitOfWork;
             _customLogger = customLogger;
@@ -24,53 +24,53 @@ namespace FilmLand_API.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public ActionResult<IEnumerable<SliderAndFile>> GetAllSlider()
+        public ActionResult<IEnumerable<MiniBannerAndFile>> GetAllMiniBanner()
         {
-            _customLogger.StartAPI("Get All Slider");
-            IEnumerable<SliderAndFile> sliderAndFile = _unitOfWork.Slider.GetAllSlider();
-            if (sliderAndFile == null)
+            _customLogger.StartAPI("Get All Mini Banner");
+            IEnumerable<MiniBannerAndFile> miniBannerAndFileList = _unitOfWork.MiniBanner.GetAllMiniBanner();
+            if (miniBannerAndFileList == null)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
-            _customLogger.EndAPI("Get All Slider");
-            return Ok(sliderAndFile);
+            _customLogger.EndAPI("Get All Mini Banner");
+            return Ok(miniBannerAndFileList);
         }
 
         [HttpPost("Add")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> PostSlider([FromForm] SliderDTO sliderDTO)
+        public async Task<IActionResult> PostMiniBanner([FromForm] MiniBannerDTO miniBannerDTO)
         {
-            _customLogger.StartAPI("Add Slider");
-            if (sliderDTO.File == null || sliderDTO.File.Length == 0)
+            _customLogger.StartAPI("Add Mini Banner");
+            if (miniBannerDTO.File == null || miniBannerDTO.File.Length == 0)
             {
                 _customLogger.CustomApiError("No file uploaded");
                 return StatusCode(StatusCodes.Status400BadRequest);
             }
-            var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Slider", sliderDTO.File.FileName);
+            var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "MiniBanner", miniBannerDTO.File.FileName);
             using (var stream = new FileStream(path, FileMode.Create))
             {
-                await sliderDTO.File.CopyToAsync(stream);
+                await miniBannerDTO.File.CopyToAsync(stream);
             }
-            var fileName = Path.GetFileName(sliderDTO.File.FileName);
-            var FileNameWithoutExtension = Path.GetFileNameWithoutExtension(sliderDTO.File.FileName);
-            var filePath = "/Slider/";  
+            var fileName = Path.GetFileName(miniBannerDTO.File.FileName);
+            var FileNameWithoutExtension = Path.GetFileNameWithoutExtension(miniBannerDTO.File.FileName);
+            var filePath = "/MiniBanner/";
             var fileExtension = Path.GetExtension(fileName);
 
-            SliderAndFileDTO sliderAndFileDTO = new SliderAndFileDTO
+            MiniBannerAndFileDTO miniBannerAndFileDTO = new MiniBannerAndFileDTO
             {
-                SliderName = sliderDTO.SliderName,
-                SliderUrl = sliderDTO.SliderUrl,
-                SliderSort = sliderDTO.SliderSort,
+                MiniBannerName = miniBannerDTO.MiniBannerName,
+                MiniBannerUrl = miniBannerDTO.MiniBannerUrl,
+                MiniBannerSort = miniBannerDTO.MiniBannerSort,
                 FileName = FileNameWithoutExtension,
                 FilePath = filePath,
                 FileExtension = fileExtension
             };
-            string result = _unitOfWork.Slider.AddSlider(sliderAndFileDTO);
+            string result = _unitOfWork.MiniBanner.AddMiniBanner(miniBannerAndFileDTO);
             if (result == "Success")
             {
-                _customLogger.EndAPI("Add Slider");
+                _customLogger.EndAPI("Add Mini Banner");
                 return StatusCode(StatusCodes.Status201Created);
             }
             else
@@ -83,10 +83,10 @@ namespace FilmLand_API.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> PutSlider(Guid id, [FromForm] SliderDTO sliderDTO)
+        public async Task<IActionResult> PutMiniBanner(Guid id, [FromForm] MiniBannerDTO miniBannerDTO)
         {
-            _customLogger.StartAPI("Edit Slider");
-            (SliderAndFile sliderAndFile, string message) = _unitOfWork.Slider.GetSlider(id);
+            _customLogger.StartAPI("Edit Mini Banner");
+            (MiniBannerAndFile miniBannerAndFile, string message) = _unitOfWork.MiniBanner.GetMiniBanner(id);
             if (message == "Not found")
             {
                 return StatusCode(StatusCodes.Status400BadRequest);
@@ -95,34 +95,34 @@ namespace FilmLand_API.Controllers
             {
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
-            if (sliderDTO.File == null || sliderDTO.File.Length == 0)
+            if (miniBannerDTO.File == null || miniBannerDTO.File.Length == 0)
             {
                 _customLogger.CustomApiError("No file uploaded");
                 return StatusCode(StatusCodes.Status400BadRequest);
             }
-            var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "slider", sliderDTO.File.FileName);
+            var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "slider", miniBannerDTO.File.FileName);
             using (var stream = new FileStream(path, FileMode.Create))
             {
-                await sliderDTO.File.CopyToAsync(stream);
+                await miniBannerDTO.File.CopyToAsync(stream);
             }
-            var fileName = Path.GetFileName(sliderDTO.File.FileName);
-            var FileNameWithoutExtension = Path.GetFileNameWithoutExtension(sliderDTO.File.FileName);
-            var filePath = "/Slider/";
+            var fileName = Path.GetFileName(miniBannerDTO.File.FileName);
+            var FileNameWithoutExtension = Path.GetFileNameWithoutExtension(miniBannerDTO.File.FileName);
+            var filePath = "/MiniBanner/";
             var fileExtension = Path.GetExtension(fileName);
 
-            SliderAndFileDTO sliderAndFileDTO = new SliderAndFileDTO
+            MiniBannerAndFileDTO miniBannerAndFileDTO = new MiniBannerAndFileDTO
             {
-                SliderName = sliderDTO.SliderName,
-                SliderUrl = sliderDTO.SliderUrl,
-                SliderSort = sliderDTO.SliderSort,
+                MiniBannerName = miniBannerDTO.MiniBannerName,
+                MiniBannerUrl = miniBannerDTO.MiniBannerUrl,
+                MiniBannerSort = miniBannerDTO.MiniBannerSort,
                 FileName = FileNameWithoutExtension,
                 FilePath = filePath,
                 FileExtension = fileExtension
             };
-            string result = _unitOfWork.Slider.UpdateSlider(id, sliderAndFileDTO);
+            string result = _unitOfWork.MiniBanner.UpdateMiniBanner(id, miniBannerAndFileDTO);
             if (result == "Success")
             {
-                _customLogger.EndAPI("Edit Slider");
+                _customLogger.EndAPI("Edit Mini Banner");
                 return NoContent();
             }
             else
@@ -135,10 +135,10 @@ namespace FilmLand_API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public ActionResult<SliderAndFile> GetSlider(Guid id)
+        public ActionResult<MiniBannerAndFile> GetMiniBanner(Guid id)
         {
-            _customLogger.StartAPI("Get Slider");
-            (SliderAndFile sliderAndFile, string message) = _unitOfWork.Slider.GetSlider(id);
+            _customLogger.StartAPI("Get Mini Banner");
+            (MiniBannerAndFile miniBannerAndFile, string message) = _unitOfWork.MiniBanner.GetMiniBanner(id);
             if (message == "Not found")
             {
                 return StatusCode(StatusCodes.Status400BadRequest);
@@ -147,18 +147,18 @@ namespace FilmLand_API.Controllers
             {
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
-            _customLogger.EndAPI("Get Slider");
-            return Ok(sliderAndFile);
+            _customLogger.EndAPI("Get Mini Banner");
+            return Ok(miniBannerAndFile);
         }
 
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [HttpDelete("{id:Guid}")]
-        public ActionResult DeleteSlider(Guid id)
+        public ActionResult DeleteMiniBanner(Guid id)
         {
-            _customLogger.StartAPI("Delete Slider");
-            (SliderAndFile sliderAndFile, string message) = _unitOfWork.Slider.GetSlider(id);
+            _customLogger.StartAPI("Delete Mini Banner");
+            (MiniBannerAndFile miniBannerAndFile, string message) = _unitOfWork.MiniBanner.GetMiniBanner(id);
             if (message == "Not found")
             {
                 return StatusCode(StatusCodes.Status400BadRequest);
@@ -167,10 +167,10 @@ namespace FilmLand_API.Controllers
             {
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
-            string result = _unitOfWork.Slider.RemoveSlider(id);
+            string result = _unitOfWork.MiniBanner.RemoveMiniBanner(id);
             if (result == "Success")
             {
-                _customLogger.EndAPI("Delete Slider");
+                _customLogger.EndAPI("Delete Mini Banner");
                 return StatusCode(StatusCodes.Status200OK);
             }
             else
@@ -186,7 +186,7 @@ namespace FilmLand_API.Controllers
         public ActionResult ChangeStatus(Guid id)
         {
             _customLogger.StartAPI("Change Status");
-            (SliderAndFile sliderAndFile, string message) = _unitOfWork.Slider.GetSlider(id);
+            (MiniBannerAndFile miniBannerAndFile, string message) = _unitOfWork.MiniBanner.GetMiniBanner(id);
             if (message == "Not found")
             {
                 return StatusCode(StatusCodes.Status400BadRequest);
@@ -195,7 +195,7 @@ namespace FilmLand_API.Controllers
             {
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
-            message = _unitOfWork.Slider.ChangeStatus(id);
+            message = _unitOfWork.MiniBanner.ChangeStatus(id);
             if (message == "Success")
             {
                 _customLogger.EndAPI("Change Status");
