@@ -11,5 +11,6 @@ namespace FilmLand.DataAccsess.Repository.IRepository
         ISiteMenuRepository SiteMenu { get; }
         ISliderRepository Slider { get; }
         IMiniBannerRepository MiniBanner { get; }
+        IMovieRepository Movie { get; }
     }
 }
