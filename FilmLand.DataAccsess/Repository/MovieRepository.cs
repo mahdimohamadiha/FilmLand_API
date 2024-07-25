@@ -1,6 +1,7 @@
 ﻿using FilmLand.DataAccsess.Repository.IRepository;
 using FilmLand.Database;
 using FilmLand.Logs;
+using FilmLand.Models;
 using FilmLand.Models.DTO;
 using System;
 using System.Collections.Generic;

@@ -18,12 +18,14 @@ namespace FilmLand.DataAccsess.Repository
             Slider = new SliderRepository(customLogger);
             MiniBanner = new MiniBannerRepository(customLogger);
             Movie = new MovieRepository(customLogger);
+            Genre = new GenreRepository(customLogger);
+            Category = new CategoryRepository(customLogger);
         }
-
         public ISiteMenuRepository SiteMenu { get; private set; }
         public ISliderRepository Slider { get; private set; }
         public IMiniBannerRepository MiniBanner { get; private set; }
         public IMovieRepository Movie { get; private set; }
-
+        public IGenreRepository Genre { get; private set; }
+        public ICategoryRepository Category { get; private set; }
     }
 }
