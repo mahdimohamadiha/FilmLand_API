@@ -25,12 +25,46 @@ namespace FilmLand.DataAccsess.Repository
             if (message == "Success")
             {
                 _customLogger.SuccessDatabase(message);
+                Guid idMovieCategory = Guid.NewGuid();
+                string message2 = DapperEntities.ExecuteDatabase("INSERT INTO MovieCategory (MovieCategoryId, MovieCategory_MovieRef, MovieCategory_CategoryRef) VALUES (@MovieCategoryId, @MovieCategory_MovieRef, @MovieCategory_CategoryRef);", Connection.FilmLand(), new { MovieCategoryId = idMovieCategory, MovieCategory_MovieRef = idMovie, MovieCategory_CategoryRef = movieDTO.CategoryId});
+                if (message2 == "Success")
+                {
+                    _customLogger.SuccessDatabase(message2);
+                    Guid idMovieGenre = Guid.NewGuid();
+                    string message3 = DapperEntities.ExecuteDatabase("INSERT INTO MovieGenre (MovieGenreId, MovieGenre_MovieRef, MovieGenre_GenreRef) VALUES (@MovieGenreId, @MovieGenre_MovieRef, @MovieGenre_GenreRef);", Connection.FilmLand(), new { MovieGenreId = idMovieGenre, MovieGenre_MovieRef = idMovie, MovieGenre_GenreRef = movieDTO.GenreId });
+                    if (message3 == "Success")
+                    {
+                        _customLogger.SuccessDatabase(message3);
+                    }
+                    else
+                    {
+                        _customLogger.ErrorDatabase(message3);
+                    }
+                }
+                else
+                {
+                    _customLogger.ErrorDatabase(message2);
+                }
             }
             else
             {
                 _customLogger.ErrorDatabase(message);
             }
             return message;
+        }
+
+        public string GetAllMovie(MovieDTO movieDTO)
+        {
+            (IEnumerable<SiteMenu> siteMenuList, string message) = DapperEntities.QueryDatabase<SiteMenu>("SELECT * FROM SiteMenu WHERE SiteMenuIsDelete = 0 ORDER BY SiteMenuSort", Connection.FilmLand());
+            if (message == "Success")
+            {
+                _customLogger.SuccessDatabase(message);
+            }
+            else
+            {
+                _customLogger.ErrorDatabase(message);
+            }
+            return siteMenuList;
         }
     }
 }
