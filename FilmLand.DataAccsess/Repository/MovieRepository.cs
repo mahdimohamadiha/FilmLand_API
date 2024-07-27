@@ -70,18 +70,27 @@ namespace FilmLand.DataAccsess.Repository
             return allMovieList;
         }
 
-        public IEnumerable<AllMovie> GetAllMovie()
+        public (IEnumerable<Movie>, string) GetMovie(Guid movieId)
         {
-            (IEnumerable<AllMovie> allMovieList, string message) = DapperEntities.QueryDatabase<AllMovie>("SELECT [MovieId]\r\n\t  ,[MovieEnglishName]\r\n      ,[MovieCreateDate]\r\n      ,[MovieModifiedDate]\r\n      ,[MovieIsStatus]\r\n\t  ,[CategoryTitle]\r\n\t  ,[GenreTitle]\r\nFROM ((([Movie] left join [MovieCategory] on Movie.MovieId = MovieCategory.MovieCategory_MovieRef) left join Category on Category.CategoryId = MovieCategory.MovieCategory_CategoryRef) left join [MovieGenre] on Movie.MovieId = MovieGenre.MovieGenre_MovieRef) left join Genre on Genre.GenreId = MovieGenre.MovieGenre_GenreRef\r\nWHERE MovieIsDelete = 0", Connection.FilmLand());
+            (IEnumerable<Movie> movieList, string message) = DapperEntities.QueryDatabase<Movie>("SELECT [MovieId]\r\n      ,[MoviePersionName]\r\n      ,[MovieEnglishName]\r\n      ,[MovieTitle]\r\n      ,[MovieReleaseDate]\r\n      ,[MovieStatus]\r\n      ,[MovieCountryProduct]\r\n      ,[MovieAgeCategory]\r\n      ,[MovieOriginalLanguage]\r\n      ,[MovieIMDBScore]\r\n      ,[MovieAuthor]\r\n      ,[MovieDirector]\r\n      ,[MovieDuration]\r\n      ,[MovieSummary]\r\n      ,[MovieAbout]\r\n      ,[MovieBudget]\r\n      ,[MovieIsStatus]\r\n\t  ,[GenreTitle]\r\n\t  ,[CategoryTitle]\r\nFROM ((([Movie] left join [MovieCategory] on Movie.MovieId = MovieCategory.MovieCategory_MovieRef) left join Category on Category.CategoryId = MovieCategory.MovieCategory_CategoryRef) left join [MovieGenre] on Movie.MovieId = MovieGenre.MovieGenre_MovieRef) left join Genre on Genre.GenreId = MovieGenre.MovieGenre_GenreRef\r\nWHERE Movie.MovieId = @MovieId", Connection.FilmLand(), new { MovieId = movieId });
             if (message == "Success")
             {
-                _customLogger.SuccessDatabase(message);
+                if (movieList.Count() == 0)
+                {
+                    _customLogger.CustomDatabaseError("Id was not found in the database");
+                    return (null, "Not found");
+                }
+                else
+                {
+                    _customLogger.SuccessDatabase(message);
+                    return (movieList, "Success");
+                }
             }
             else
             {
                 _customLogger.ErrorDatabase(message);
+                return (null, "Error");
             }
-            return allMovieList;
         }
     }
 }

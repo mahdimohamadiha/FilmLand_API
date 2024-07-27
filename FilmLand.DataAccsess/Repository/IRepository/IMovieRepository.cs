@@ -12,5 +12,7 @@ namespace FilmLand.DataAccsess.Repository.IRepository
     {
         string AddMovie(MovieDTO movieDTO);
         IEnumerable<AllMovie> GetAllMovie();
+
+        (IEnumerable<Movie>, string) GetMovie(Guid movieId);
     }
 }

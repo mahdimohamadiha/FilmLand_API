@@ -14,6 +14,6 @@ namespace FilmLand.Models
         public DateTime MovieModifiedDate { get; set; }
         public bool MovieIsStatus { get; set; }
         public string CategoryTitle { get; set; }
-        public List<string> GenreTitle { get; set; }
+        public List<string> GenreTitles { get; set; }
     }
 }

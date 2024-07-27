@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace FilmLand.Models
 {
-    public class Movie
+    public class ResponseMovie
     {
         public Guid MovieId { get; set; }
         public string MoviePersionName { get; set; }
@@ -32,6 +32,6 @@ namespace FilmLand.Models
         public bool MovieIsStatus { get; set; }
         public bool MovieIsDelete { get; set; }
         public string CategoryTitle { get; set; }
-        public string GenreTitle { get; set; }
+        public List<string> GenreTitles { get; set; }
     }
 }
