@@ -1,6 +1,7 @@
 ﻿using FilmLand.DataAccsess.Repository.IRepository;
 using FilmLand.Database;
 using FilmLand.Logs;
+using FilmLand.Models;
 using FilmLand.Models.DTO;
 using System;
 using System.Collections.Generic;
@@ -30,6 +31,19 @@ namespace FilmLand.DataAccsess.Repository
                 _customLogger.ErrorDatabase(message);
             }
             return message;
+        }
+        public IEnumerable<MovieFile> GetAllMovieFile(Guid movieId)
+        {
+            (IEnumerable<MovieFile> allMovieFileList, string message) = DapperEntities.QueryDatabase<MovieFile>("SELECT [MovieFileId]\r\n      ,[MovieFileChapter]\r\n      ,[MovieFileEpisode]\r\n      ,[MovieFileQuality]\r\n      ,[MovieFileDubbing]\r\n      ,[MovieFileIsCensored]\r\n      ,[MovieFileSubtitleURL]\r\n      ,[MovieFile_MovieURL]\r\n      ,[MovieFileCreateDate]\r\n      ,[MovieFileModifiedDate]\r\n      ,[MovieFileIsStatus]\r\n      ,[MovieFileIsDelete]\r\n      ,[MovieRef]\r\n  FROM [MovieFile]\r\n  WHERE MovieRef = @MovieId", Connection.FilmLand(), new { MovieID = movieId });
+            if (message == "Success")
+            {
+                _customLogger.SuccessDatabase(message);
+            }
+            else
+            {
+                _customLogger.ErrorDatabase(message);
+            }
+            return allMovieFileList;
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using FilmLand.DataAccsess.Repository.IRepository;
 using FilmLand.Logs;
+using FilmLand.Models;
 using FilmLand.Models.DTO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -37,6 +38,21 @@ namespace FilmLand_API.Controllers
             {
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
+        }
+
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public ActionResult<IEnumerable<MovieFile>> GetAllMovieFile(Guid movieId)
+        {
+            _customLogger.StartAPI("Get All Movie File");
+            IEnumerable<MovieFile> movieFileList = _unitOfWork.MovieFile.GetAllMovieFile(movieId);
+            if (movieFileList == null)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+            _customLogger.EndAPI("Get All Mvoie File");
+            return Ok(movieFileList);
         }
     }
 }

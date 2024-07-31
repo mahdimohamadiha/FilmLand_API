@@ -32,6 +32,8 @@ namespace FilmLand.Models
         public bool MovieIsStatus { get; set; }
         public bool MovieIsDelete { get; set; }
         public string CategoryTitle { get; set; }
+        public Guid CategoryId { get; set; }
         public List<string> GenreTitles { get; set; }
+        public List<Guid> GenreIds { get; set; }
     }
 }

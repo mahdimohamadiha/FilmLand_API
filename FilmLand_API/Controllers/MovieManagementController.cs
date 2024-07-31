@@ -10,13 +10,13 @@ namespace FilmLand_API.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    public class MovieController : ControllerBase
+    public class MovieManagementController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;
 
         private readonly ICustomLogger _customLogger;
 
-        public MovieController(IUnitOfWork unitOfWork, ICustomLogger customLogger)
+        public MovieManagementController(IUnitOfWork unitOfWork, ICustomLogger customLogger)
         {
             _unitOfWork = unitOfWork;
             _customLogger = customLogger;
@@ -29,7 +29,7 @@ namespace FilmLand_API.Controllers
         public async Task<IActionResult> AddMovie([FromForm] MovieDTO movieDTO)
         {
             _customLogger.StartAPI("Add Movie");
-            string result = _unitOfWork.Movie.AddMovie(movieDTO);
+            string result = _unitOfWork.MovieManagement.AddMovie(movieDTO);
             if (result == "Success")
             {
                 _customLogger.EndAPI("Add Movie");
@@ -47,7 +47,7 @@ namespace FilmLand_API.Controllers
         public ActionResult<IEnumerable<ResponseAllMovie>> GetAllMovie()
         {
             _customLogger.StartAPI("Get All Movie");
-            IEnumerable<AllMovie> allMovieList = _unitOfWork.Movie.GetAllMovie();
+            IEnumerable<AllMovie> allMovieList = _unitOfWork.MovieManagement.GetAllMovie();
 
             var responseAllMovies = allMovieList
                 .GroupBy(m => m.MovieId)
@@ -77,7 +77,7 @@ namespace FilmLand_API.Controllers
         public ActionResult<Movie> GetMovie(Guid id)
         {
             _customLogger.StartAPI("Get Movie");
-            (IEnumerable<Movie> movies, string message) = _unitOfWork.Movie.GetMovie(id);
+            (IEnumerable<Movie> movies, string message) = _unitOfWork.MovieManagement.GetMovie(id);
             var responseMovies = movies
                 .GroupBy(m => m.MovieId)
                 .Select(g => new ResponseMovie
@@ -106,9 +106,11 @@ namespace FilmLand_API.Controllers
                     MovieIsStatus = g.First().MovieIsStatus,
                     MovieIsDelete = g.First().MovieIsDelete,
                     CategoryTitle = g.First().CategoryTitle,
-                    GenreTitles = g.Select(m => m.GenreTitle).Distinct().ToList()
-                })
-                .ToList();
+                    CategoryId = g.First().CategoryId,
+                    GenreTitles = g.Select(m => m.GenreTitle).Distinct().ToList(),
+                    GenreIds = g.Select(m => m.GenreId).Distinct().ToList()
+
+                }).FirstOrDefault();
             if (message == "Not found")
             {
                 return StatusCode(StatusCodes.Status400BadRequest);

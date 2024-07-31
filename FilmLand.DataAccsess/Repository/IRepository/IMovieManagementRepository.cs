@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace FilmLand.DataAccsess.Repository.IRepository
 {
-    public interface IMovieRepository
+    public interface IMovieManagementRepository
     {
         string AddMovie(MovieDTO movieDTO);
         IEnumerable<AllMovie> GetAllMovie();

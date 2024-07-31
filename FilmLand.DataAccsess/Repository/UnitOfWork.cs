@@ -17,7 +17,7 @@ namespace FilmLand.DataAccsess.Repository
             SiteMenu = new SiteMenuRepository(customLogger);
             Slider = new SliderRepository(customLogger);
             MiniBanner = new MiniBannerRepository(customLogger);
-            Movie = new MovieRepository(customLogger);
+            MovieManagement = new MovieManagementRepository(customLogger);
             Genre = new GenreRepository(customLogger);
             Category = new CategoryRepository(customLogger);
             MovieFile = new MovieFileRepository(customLogger);
@@ -25,7 +25,7 @@ namespace FilmLand.DataAccsess.Repository
         public ISiteMenuRepository SiteMenu { get; private set; }
         public ISliderRepository Slider { get; private set; }
         public IMiniBannerRepository MiniBanner { get; private set; }
-        public IMovieRepository Movie { get; private set; }
+        public IMovieManagementRepository MovieManagement { get; private set; }
         public IGenreRepository Genre { get; private set; }
         public ICategoryRepository Category { get; private set; }
         public IMovieFileRepository MovieFile { get; private set; }
