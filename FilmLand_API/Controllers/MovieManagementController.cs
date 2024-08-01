@@ -29,7 +29,55 @@ namespace FilmLand_API.Controllers
         public async Task<IActionResult> AddMovie([FromForm] MovieDTO movieDTO)
         {
             _customLogger.StartAPI("Add Movie");
-            string result = _unitOfWork.MovieManagement.AddMovie(movieDTO);
+            List<string> galleryPicPath = new List<string>();
+            if (movieDTO.CartPicture == null || movieDTO.CartPicture.Length == 0)
+            {
+                _customLogger.CustomApiError("No file uploaded");
+                return StatusCode(StatusCodes.Status400BadRequest);
+            }
+            var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Cart", movieDTO.CartPicture.FileName);
+            using (var stream = new FileStream(path, FileMode.Create))
+            {
+                await movieDTO.CartPicture.CopyToAsync(stream);
+            }
+            var cartPicPath = "/Cart/" + Path.GetFileName(movieDTO.CartPicture.FileName);
+            foreach (var galleryPicture in movieDTO.GalleryPictures)
+            {
+                if (galleryPicture == null || galleryPicture.Length == 0)
+                {
+                    _customLogger.CustomApiError("No file uploaded");
+                    return StatusCode(StatusCodes.Status400BadRequest);
+                }
+                var path2 = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Gallery", galleryPicture.FileName);
+                using (var stream = new FileStream(path2, FileMode.Create))
+                {
+                    await galleryPicture.CopyToAsync(stream);
+                }
+                galleryPicPath.Add("/Gallery/" + Path.GetFileName(galleryPicture.FileName));
+            }
+            MovieAndUploadFileDTO movieAndUploadFileDTO = new MovieAndUploadFileDTO
+            {
+                MoviePersionName = movieDTO.MoviePersionName,
+                MovieEnglishName = movieDTO.MovieEnglishName,
+                MovieTitle = movieDTO.MovieTitle,
+                MovieReleaseDate = movieDTO.MovieReleaseDate,
+                MovieStatus = movieDTO.MovieStatus,
+                MovieCountryProduct = movieDTO.MovieCountryProduct,
+                MovieAgeCategory = movieDTO.MovieAgeCategory,
+                MovieOriginalLanguage = movieDTO.MovieOriginalLanguage,
+                MovieIMDBScore = movieDTO.MovieIMDBScore,
+                MovieAuthor = movieDTO.MovieAuthor,
+                MovieDirector = movieDTO.MovieDirector,
+                MovieDuration = movieDTO.MovieDuration,
+                MovieSummary = movieDTO.MovieSummary,
+                MovieAbout = movieDTO.MovieAbout,
+                MovieBudget = movieDTO.MovieBudget,
+                CategoryId = movieDTO.CategoryId,
+                GenreIds = movieDTO.GenreIds,
+                CartPicturePath = cartPicPath,
+                GalleryPicturesPath = galleryPicPath
+            };
+            string result = _unitOfWork.MovieManagement.AddMovie(movieAndUploadFileDTO);
             if (result == "Success")
             {
                 _customLogger.EndAPI("Add Movie");

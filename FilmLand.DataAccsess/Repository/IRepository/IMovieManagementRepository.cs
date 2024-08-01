@@ -10,7 +10,7 @@ namespace FilmLand.DataAccsess.Repository.IRepository
 {
     public interface IMovieManagementRepository
     {
-        string AddMovie(MovieDTO movieDTO);
+        string AddMovie(MovieAndUploadFileDTO movieDTO);
         IEnumerable<AllMovie> GetAllMovie();
 
         (IEnumerable<Movie>, string) GetMovie(Guid movieId);

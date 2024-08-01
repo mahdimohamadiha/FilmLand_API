@@ -22,6 +22,8 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\MiniBanner\" />
+    <Folder Include="wwwroot\Cart\" />
+    <Folder Include="wwwroot\Gallery\" />
     <Folder Include="wwwroot\Slider\" />
   </ItemGroup>
 

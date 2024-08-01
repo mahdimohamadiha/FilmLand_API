@@ -18,7 +18,7 @@ namespace FilmLand.DataAccsess.Repository
         {
             _customLogger = customLogger;
         }
-        public string AddMovie(MovieDTO movieDTO)
+        public string AddMovie(MovieAndUploadFileDTO movieDTO)
         {
             Guid idMovie = Guid.NewGuid();
             string message = DapperEntities.ExecuteDatabase("INSERT INTO Movie (MovieId, MoviePersionName, MovieEnglishName, MovieTitle, MovieReleaseDate , MovieStatus, MovieCountryProduct, MovieAgeCategory, MovieOriginalLanguage, MovieIMDBScore, MovieAuthor, MovieDirector, MovieDuration, MovieSummary, MovieAbout, MovieBudget, MovieLike, MovieDislike, MovieCreateDate, MovieIsStatus, MovieIsDelete) VALUES (@MovieId, @MoviePersionName, @MovieEnglishName, @MovieTitle, @MovieReleaseDate , @MovieStatus, @MovieCountryProduct, @MovieAgeCategory, @MovieOriginalLanguage, @MovieIMDBScore, @MovieAuthor, @MovieDirector, @MovieDuration, @MovieSummary, @MovieAbout, @MovieBudget, 0, 0, GETDATE(), 1, 0);", Connection.FilmLand(), new { MovieId = idMovie, MoviePersionName = movieDTO.MoviePersionName, MovieEnglishName = movieDTO.MovieEnglishName, MovieTitle = movieDTO.MovieTitle, MovieReleaseDate = movieDTO.MovieReleaseDate, MovieStatus = movieDTO.MovieStatus, MovieCountryProduct = movieDTO.MovieCountryProduct, MovieAgeCategory = movieDTO.MovieAgeCategory, MovieOriginalLanguage = movieDTO.MovieOriginalLanguage, MovieIMDBScore = movieDTO.MovieIMDBScore, MovieAuthor = movieDTO.MovieAuthor, MovieDirector = movieDTO.MovieDirector, MovieDuration = movieDTO.MovieDuration, MovieSummary = movieDTO.MovieSummary, MovieAbout = movieDTO.MovieAbout, MovieBudget = movieDTO.MovieBudget });
@@ -52,6 +52,29 @@ namespace FilmLand.DataAccsess.Repository
             else
             {
                 _customLogger.ErrorDatabase(message);
+            }
+            Guid idUploadFile = Guid.NewGuid();
+            string message4 = DapperEntities.ExecuteDatabase("INSERT INTO UploadFile (UploadFileId, UploadFileTitle, UploadFilePath, UploadFile_MovieRef, UploadFileCreateDate, UploadFileIsStatus, UploadFileIsDelete) VALUES (@UploadFileId, @UploadFileTitle, @UploadFilePath, @UploadFile_MovieRef, GETDATE(), 1, 0);", Connection.FilmLand(), new { UploadFileId = idUploadFile, UploadFileTitle = "CartPicture", UploadFilePath = movieDTO.CartPicturePath, UploadFile_MovieRef = idMovie });
+            if (message4 == "Success")
+            {
+                _customLogger.SuccessDatabase(message4);
+            }
+            else
+            {
+                _customLogger.ErrorDatabase(message4);
+            }
+            foreach (var galleryPic in movieDTO.GalleryPicturesPath)
+            {
+                Guid idUploadFile2 = Guid.NewGuid();
+                string message5 = DapperEntities.ExecuteDatabase("INSERT INTO UploadFile (UploadFileId, UploadFileTitle, UploadFilePath, UploadFile_MovieRef, UploadFileCreateDate, UploadFileIsStatus, UploadFileIsDelete) VALUES (@UploadFileId, @UploadFileTitle, @UploadFilePath, @UploadFile_MovieRef, GETDATE(), 1, 0);", Connection.FilmLand(), new { UploadFileId = idUploadFile2, UploadFileTitle = "GalleryPicture", UploadFilePath = galleryPic, UploadFile_MovieRef = idMovie });
+                if (message4 == "Success")
+                {
+                    _customLogger.SuccessDatabase(message5);
+                }
+                else
+                {
+                    _customLogger.ErrorDatabase(message5);
+                }
             }
             return message;
         }
