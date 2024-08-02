@@ -76,6 +76,19 @@ namespace FilmLand.DataAccsess.Repository
                     _customLogger.ErrorDatabase(message5);
                 }
             }
+            foreach (var ActorId in movieDTO.ActorIds)
+            {
+                Guid idMovieActor = Guid.NewGuid();
+                string message6 = DapperEntities.ExecuteDatabase("INSERT INTO MovieActor (MovieActorId, MovieActor_MovieRef, MovieActor_ActorRef) VALUES (@MovieActorId, @MovieActor_MovieRef, @MovieActor_ActorRef);", Connection.FilmLand(), new { MovieActorId = idMovieActor, MovieActor_MovieRef = idMovie, MovieActor_ActorRef = ActorId });
+                if (message4 == "Success")
+                {
+                    _customLogger.SuccessDatabase(message6);
+                }
+                else
+                {
+                    _customLogger.ErrorDatabase(message6);
+                }
+            }
             return message;
         }
 

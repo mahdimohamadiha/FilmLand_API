@@ -75,7 +75,8 @@ namespace FilmLand_API.Controllers
                 CategoryId = movieDTO.CategoryId,
                 GenreIds = movieDTO.GenreIds,
                 CartPicturePath = cartPicPath,
-                GalleryPicturesPath = galleryPicPath
+                GalleryPicturesPath = galleryPicPath,
+                ActorIds = movieDTO.ActorIds
             };
             string result = _unitOfWork.MovieManagement.AddMovie(movieAndUploadFileDTO);
             if (result == "Success")

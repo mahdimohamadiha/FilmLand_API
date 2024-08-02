@@ -21,6 +21,8 @@ namespace FilmLand.DataAccsess.Repository
             Genre = new GenreRepository(customLogger);
             Category = new CategoryRepository(customLogger);
             MovieFile = new MovieFileRepository(customLogger);
+            Actor = new ActorRepository(customLogger);
+
         }
         public ISiteMenuRepository SiteMenu { get; private set; }
         public ISliderRepository Slider { get; private set; }
@@ -29,5 +31,6 @@ namespace FilmLand.DataAccsess.Repository
         public IGenreRepository Genre { get; private set; }
         public ICategoryRepository Category { get; private set; }
         public IMovieFileRepository MovieFile { get; private set; }
+        public IActorRepository Actor { get; private set; }
     }
 }

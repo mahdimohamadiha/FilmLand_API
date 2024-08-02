@@ -26,7 +26,8 @@ namespace FilmLand.Models.DTO
         public string? MovieBudget { get; set; }
         public Guid? CategoryId { get; set; }
         public List<Guid>? GenreIds { get; set; }
-        public string CartPicturePath { get; set; }
-        public List<string> GalleryPicturesPath { get; set; }
+        public string? CartPicturePath { get; set; }
+        public List<string>? GalleryPicturesPath { get; set; }
+        public List<Guid>? ActorIds { get; set; }
     }
 }
