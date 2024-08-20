@@ -40,13 +40,13 @@ namespace FilmLand_API.Controllers
             }
         }
 
-        [HttpGet]
+        [HttpGet("{id:Guid}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public ActionResult<IEnumerable<MovieFile>> GetAllMovieFile(Guid movieId)
+        public ActionResult<IEnumerable<MovieFile>> GetAllMovieFile(Guid id)
         {
             _customLogger.StartAPI("Get All Movie File");
-            IEnumerable<MovieFile> movieFileList = _unitOfWork.MovieFile.GetAllMovieFile(movieId);
+            IEnumerable<MovieFile> movieFileList = _unitOfWork.MovieFile.GetAllMovieFile(id);
             if (movieFileList == null)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError);
