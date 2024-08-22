@@ -11,11 +11,9 @@ namespace FilmLand.Models.DTO
     {
         public string MovieFileChapter { get; set; }
         public string MovieFileEpisode { get; set; }
-        public int MovieFileQuality { get; set; }
         public string MovieFileDubbing { get; set; }
         public bool MovieFileIsCensored { get; set; }
         public string? MovieFileSubtitleURL { get; set; }
-        public string MovieFile_MovieURL { get; set; }
         public Guid? MovieRef { get; set; }
     }
 }

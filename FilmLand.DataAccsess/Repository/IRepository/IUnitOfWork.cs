@@ -17,5 +17,6 @@ namespace FilmLand.DataAccsess.Repository.IRepository
         IMovieFileRepository MovieFile { get; }
         IActorRepository Actor { get; }
         IMovieRepository Movie { get; }
+        IMovieFileDetailRepository MovieFileDetail { get; }
     }
 }
