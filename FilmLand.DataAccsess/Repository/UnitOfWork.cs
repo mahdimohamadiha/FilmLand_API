@@ -24,6 +24,8 @@ namespace FilmLand.DataAccsess.Repository
             Actor = new ActorRepository(customLogger);
             Movie = new MovieRepository(customLogger);
             MovieFileDetail = new MovieFileDetailRepository(customLogger);
+            User = new UserRepository(customLogger);
+            Subscription = new SubscriptionRepository(customLogger);
         }
         public ISiteMenuRepository SiteMenu { get; private set; }
         public ISliderRepository Slider { get; private set; }
@@ -35,5 +37,7 @@ namespace FilmLand.DataAccsess.Repository
         public IActorRepository Actor { get; private set; }
         public IMovieRepository Movie { get; private set; }
         public IMovieFileDetailRepository MovieFileDetail { get; private set; }
+        public IUserRepository User { get; private set; }
+        public ISubscriptionRepository Subscription { get; private set; }
     }
 }
