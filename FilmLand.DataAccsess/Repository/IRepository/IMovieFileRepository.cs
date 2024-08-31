@@ -13,5 +13,7 @@ namespace FilmLand.DataAccsess.Repository.IRepository
         string AddMovieFile(MovieFileDTO movieFileDTO);
         IEnumerable<MovieFile> GetAllMovieFile(Guid movieId);
         string RemoveMovieFile(Guid movieFileId);
+        (MovieFileSummary, string) GetMovieFile(Guid movieFileId);
+        string UpdateMovieFile(Guid movieFileId, MovieFileDTO movieFileDTO);
     }
 }

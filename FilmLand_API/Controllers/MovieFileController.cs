@@ -62,11 +62,68 @@ namespace FilmLand_API.Controllers
         public ActionResult DeleteMovieFile(Guid id)
         {
             _customLogger.StartAPI("Delete Movie File");
+            (MovieFileSummary movieFileSummary, string message) = _unitOfWork.MovieFile.GetMovieFile(id);
+            if (message == "Not found")
+            {
+                return StatusCode(StatusCodes.Status400BadRequest);
+            }
+            else if (message == "Error")
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
             string result = _unitOfWork.MovieFile.RemoveMovieFile(id);
             if (result == "Success")
             {
                 _customLogger.EndAPI("Delete Movie File");
                 return StatusCode(StatusCodes.Status200OK);
+            }
+            else
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpGet("Single/{id:Guid}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public ActionResult<MovieFile> GetMovieFile(Guid id)
+        {
+            _customLogger.StartAPI("Get Movie File");
+            (MovieFileSummary movieFileSummary, string message) = _unitOfWork.MovieFile.GetMovieFile(id);
+            if (message == "Not found")
+            {
+                return StatusCode(StatusCodes.Status400BadRequest);
+            }
+            else if (message == "Error")
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+            _customLogger.EndAPI("Get Movie File");
+            return Ok(movieFileSummary);
+        }
+
+        [HttpPut("Edit/{id:Guid}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public ActionResult PutMovieFile(Guid id, [FromBody] MovieFileDTO movieFileDTO)
+        {
+            _customLogger.StartAPI("Edit Movie File");
+            (MovieFileSummary movieFileSummary, string message) = _unitOfWork.MovieFile.GetMovieFile(id);
+            if (message == "Not found")
+            {
+                return StatusCode(StatusCodes.Status400BadRequest);
+            }
+            else if (message == "Error")
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+            string result = _unitOfWork.MovieFile.UpdateMovieFile(id, movieFileDTO);
+            if (result == "Success")
+            {
+                _customLogger.EndAPI("Edit Movie File");
+                return NoContent();
             }
             else
             {
