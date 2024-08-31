@@ -45,5 +45,19 @@ namespace FilmLand.DataAccsess.Repository
             }
             return allMovieFileList;
         }
+
+        public string RemoveMovieFile(Guid movieFileId)
+        {
+            string message = DapperEntities.ExecuteDatabase("UPDATE MovieFile SET MovieFileIsDelete = 1 WHERE MovieFileId = @MovieFile", Connection.FilmLand(), new { MovieFile = movieFileId });
+            if (message == "Success")
+            {
+                _customLogger.SuccessDatabase(message);
+            }
+            else
+            {
+                _customLogger.ErrorDatabase(message);
+            }
+            return message;
+        }
     }
 }

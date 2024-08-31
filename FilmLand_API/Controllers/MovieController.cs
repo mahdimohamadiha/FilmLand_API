@@ -1,6 +1,7 @@
 ﻿using FilmLand.DataAccsess.Repository.IRepository;
 using FilmLand.Logs;
 using FilmLand.Models;
+using FilmLand.Models.DTO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -67,6 +68,23 @@ namespace FilmLand_API.Controllers
             }
             _customLogger.EndAPI("Get All Mvoie File");
             return Ok(responseAllMovieFile);
+        }
+
+        [HttpGet("All")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public ActionResult<IEnumerable<Movies>> GetMovies(string category, string genre)
+        {
+            MovieParameterDTO movieParameterDTO = new MovieParameterDTO
+            {
+                CategoryParameter = category,
+                GenreParameter = genre
+            };
+            _customLogger.StartAPI("Get Movies");
+            IEnumerable<Movies> movies = _unitOfWork.Movie.GetMovies(movieParameterDTO);
+            _customLogger.EndAPI("Get Movies");
+            return Ok(movies);
         }
     }
 }

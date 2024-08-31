@@ -14,5 +14,8 @@ namespace FilmLand.Models
         public DateTime GenreModifiedDate { get; set; }
         public bool GenreIsStatus { get; set; }
         public bool GenreIsDelete { get; set; }
+        public string GenreParameter { get; set; }
+        public int GenreOrder { get; set; }
+
     }
 }

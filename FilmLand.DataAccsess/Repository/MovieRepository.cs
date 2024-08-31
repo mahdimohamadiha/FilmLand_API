@@ -2,6 +2,7 @@
 using FilmLand.Database;
 using FilmLand.Logs;
 using FilmLand.Models;
+using FilmLand.Models.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -68,6 +69,47 @@ namespace FilmLand.DataAccsess.Repository
                 _customLogger.ErrorDatabase(message);
                 return (null, "Error");
             }
+        }
+
+        public IEnumerable<Movies> GetMovies(MovieParameterDTO movieParameterDTO)
+        {
+            string para = "";
+            if (movieParameterDTO.CategoryParameter == "all")
+            {
+                if (movieParameterDTO.GenreParameter == "all")
+                {
+                    para = "";
+
+                }
+                else
+                {
+                    para = $"WHERE GenreParameter = '{movieParameterDTO.GenreParameter}'";
+                }
+            }
+            else
+            {
+                if (movieParameterDTO.GenreParameter == "all")
+                {
+                    para = $"WHERE CategoryParameter = '{movieParameterDTO.CategoryParameter}'";
+
+                }
+                else
+                {
+                    para = $"WHERE CategoryParameter = '{movieParameterDTO.CategoryParameter}' AND GenreParameter = '{movieParameterDTO.GenreParameter}'";
+                    ;
+
+                }
+            }
+            (IEnumerable<Movies> movies, string message) = DapperEntities.QueryDatabase<Movies>("SELECT MovieId, MoviePersionName, MovieEnglishName, MovieReleaseDate, MovieCountryProduct, MovieIMDBScore, MovieSummary\r\nFROM Movie join MovieCategory on MovieId = MovieCategory_MovieRef join Category on CategoryId = MovieCategory_CategoryRef join MovieGenre on MovieId = MovieGenre_MovieRef join Genre on GenreId = MovieGenre_GenreRef\r\n" + para + "\r\nGROUP BY MovieId, MoviePersionName, MovieEnglishName, MovieReleaseDate, MovieCountryProduct, MovieIMDBScore, MovieSummary", Connection.FilmLand());
+            if (message == "Success")
+            {
+                _customLogger.SuccessDatabase(message);
+            }
+            else
+            {
+                _customLogger.ErrorDatabase(message);
+            }
+            return movies;
         }
     }
 }

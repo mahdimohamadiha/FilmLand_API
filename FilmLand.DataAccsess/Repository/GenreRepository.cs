@@ -20,7 +20,7 @@ namespace FilmLand.DataAccsess.Repository
 
         public IEnumerable<Genre> GetAllGenre()
         {
-            (IEnumerable<Genre> genreList, string message) = DapperEntities.QueryDatabase<Genre>("SELECT * FROM Genre WHERE GenreIsDelete = 0", Connection.FilmLand());
+            (IEnumerable<Genre> genreList, string message) = DapperEntities.QueryDatabase<Genre>("SELECT * FROM Genre WHERE GenreIsDelete = 0 ORDER BY GenreOrder", Connection.FilmLand());
             if (message == "Success")
             {
                 _customLogger.SuccessDatabase(message);

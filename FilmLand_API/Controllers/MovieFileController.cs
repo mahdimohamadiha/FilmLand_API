@@ -54,5 +54,24 @@ namespace FilmLand_API.Controllers
             _customLogger.EndAPI("Get All Mvoie File");
             return Ok(movieFileList);
         }
+
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [HttpDelete("{id:Guid}")]
+        public ActionResult DeleteMovieFile(Guid id)
+        {
+            _customLogger.StartAPI("Delete Movie File");
+            string result = _unitOfWork.MovieFile.RemoveMovieFile(id);
+            if (result == "Success")
+            {
+                _customLogger.EndAPI("Delete Movie File");
+                return StatusCode(StatusCodes.Status200OK);
+            }
+            else
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
     }
 }

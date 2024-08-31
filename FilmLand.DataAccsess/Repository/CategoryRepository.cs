@@ -19,7 +19,7 @@ namespace FilmLand.DataAccsess.Repository
         }
         public IEnumerable<Category> GetAllCategory()
         {
-            (IEnumerable<Category> categoryList, string message) = DapperEntities.QueryDatabase<Category>("SELECT * FROM Category WHERE CategoryIsDelete = 0", Connection.FilmLand());
+            (IEnumerable<Category> categoryList, string message) = DapperEntities.QueryDatabase<Category>("SELECT * FROM Category WHERE CategoryIsDelete = 0 ORDER BY CategoryOrder", Connection.FilmLand());
             if (message == "Success")
             {
                 _customLogger.SuccessDatabase(message);

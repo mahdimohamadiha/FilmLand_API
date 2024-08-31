@@ -14,5 +14,8 @@ namespace FilmLand.Models
         public DateTime CategoryModifiedDate { get; set; }
         public bool CategoryIsStatus { get; set; }
         public bool CategoryIsDelete { get; set; }
+        public string CategoryParameter { get; set; }
+        public int CategoryOrder { get; set; }
+
     }
 }

@@ -1,4 +1,5 @@
 ﻿using FilmLand.Models;
+using FilmLand.Models.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,5 +11,6 @@ namespace FilmLand.DataAccsess.Repository.IRepository
     public interface IMovieRepository
     {
         (Movie_MoreInfo, string) GetMovie(Guid movieId);
+        IEnumerable<Movies> GetMovies(MovieParameterDTO movieParameterDTO);
     }
 }
