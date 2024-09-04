@@ -4,6 +4,7 @@ using FilmLand.Models;
 using FilmLand.Models.DTO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Data.SqlTypes;
 
 namespace FilmLand_API.Controllers
 {
@@ -73,5 +74,72 @@ namespace FilmLand_API.Controllers
             _customLogger.EndAPI("Get Actor Summary");
             return Ok(allActorSummaryList);
         }
+
+        [HttpGet("Filter")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public ActionResult<IEnumerable<ActorSummary>> GetFilterActorSummary([FromQuery] string searchQuery)
+        {
+            _customLogger.StartAPI("Get Filter Actor Summary");
+
+            // Fetch all actor summaries
+            IEnumerable<ActorSummary> allActorSummaryList = _unitOfWork.Actor.GetAllActorSummary();
+
+            // Check for null
+            if (allActorSummaryList == null)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+
+            // Split the search query into individual words
+            var searchWords = searchQuery
+                .Split(' ', StringSplitOptions.RemoveEmptyEntries)
+                .Select(word => word.Trim().ToLower())
+                .ToHashSet(); // Use a HashSet for fast lookups
+
+            // Filter the actor summaries
+            var filteredActorSummaries = allActorSummaryList
+                .Where(actor =>
+                {
+                    // Split actor's name into words and convert to lowercase
+                    var actorNameWords = actor.ActorName
+                        .Split(' ', StringSplitOptions.RemoveEmptyEntries)
+                        .Select(word => word.Trim().ToLower());
+
+                    // Check if any word in actor's name starts with any of the search terms
+                    return searchWords.Any(searchWord =>
+                        actorNameWords.Any(actorNameWord =>
+                            actorNameWord.StartsWith(searchWord)));
+                })
+                .ToList();
+
+            // Log the end of the API processing
+            _customLogger.EndAPI("Get Filter Actor Summary");
+
+            // Return the filtered results
+            return Ok(filteredActorSummaries);
+        }
+
+        [HttpGet("{id:Guid}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public ActionResult<Actor> GetActor(Guid id)
+        {
+            _customLogger.StartAPI("Get Actor");
+            (Actor actor, string message) = _unitOfWork.Actor.GetActor(id);
+            if (message == "Not found")
+            {
+                return StatusCode(StatusCodes.Status400BadRequest);
+            }
+            else if (message == "Error")
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+            _customLogger.EndAPI("Get Actor");
+            return Ok(actor);
+        }
+
+
     }
 }

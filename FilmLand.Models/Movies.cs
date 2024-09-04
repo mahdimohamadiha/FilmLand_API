@@ -15,6 +15,7 @@ namespace FilmLand.Models
         public string MovieCountryProduct { get; set; }
         public string MovieIMDBScore { get; set; }
         public string MovieSummary { get; set; }
+        public string UploadFilePath { get; set; }
 
     }
 }

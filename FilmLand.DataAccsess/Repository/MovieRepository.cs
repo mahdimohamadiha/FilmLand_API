@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace FilmLand.DataAccsess.Repository
@@ -83,24 +84,24 @@ namespace FilmLand.DataAccsess.Repository
                 }
                 else
                 {
-                    para = $"WHERE GenreParameter = '{movieParameterDTO.GenreParameter}'";
+                    para = $"GenreParameter = '{movieParameterDTO.GenreParameter}' AND";
                 }
             }
             else
             {
                 if (movieParameterDTO.GenreParameter == "all")
                 {
-                    para = $"WHERE CategoryParameter = '{movieParameterDTO.CategoryParameter}'";
+                    para = $"CategoryParameter = '{movieParameterDTO.CategoryParameter}' AND";
 
                 }
                 else
                 {
-                    para = $"WHERE CategoryParameter = '{movieParameterDTO.CategoryParameter}' AND GenreParameter = '{movieParameterDTO.GenreParameter}'";
+                    para = $"CategoryParameter = '{movieParameterDTO.CategoryParameter}' AND GenreParameter = '{movieParameterDTO.GenreParameter}' AND";
                     ;
 
                 }
             }
-            (IEnumerable<Movies> movies, string message) = DapperEntities.QueryDatabase<Movies>("SELECT MovieId, MoviePersionName, MovieEnglishName, MovieReleaseDate, MovieCountryProduct, MovieIMDBScore, MovieSummary\r\nFROM Movie join MovieCategory on MovieId = MovieCategory_MovieRef join Category on CategoryId = MovieCategory_CategoryRef join MovieGenre on MovieId = MovieGenre_MovieRef join Genre on GenreId = MovieGenre_GenreRef\r\n" + para + "\r\nGROUP BY MovieId, MoviePersionName, MovieEnglishName, MovieReleaseDate, MovieCountryProduct, MovieIMDBScore, MovieSummary", Connection.FilmLand());
+            (IEnumerable<Movies> movies, string message) = DapperEntities.QueryDatabase<Movies>("SELECT MovieId, MoviePersionName, MovieEnglishName, MovieReleaseDate, MovieCountryProduct, MovieIMDBScore, MovieSummary, UploadFilePath FROM Movie join MovieCategory on MovieId = MovieCategory_MovieRef join Category on CategoryId = MovieCategory_CategoryRef join MovieGenre on MovieId = MovieGenre_MovieRef join Genre on GenreId = MovieGenre_GenreRef join UploadFile on MovieId = UploadFile_MovieRef WHERE " + para + " UploadFileTitle = 'CartPicture' GROUP BY MovieId, MoviePersionName, MovieEnglishName, MovieReleaseDate, MovieCountryProduct, MovieIMDBScore, MovieSummary, UploadFilePath", Connection.FilmLand());
             if (message == "Success")
             {
                 _customLogger.SuccessDatabase(message);

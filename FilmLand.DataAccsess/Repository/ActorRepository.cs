@@ -55,5 +55,28 @@ namespace FilmLand.DataAccsess.Repository
             }
             return allActorSummaryList;
         }
+
+        public (Actor, string) GetActor(Guid actorId)
+        {
+            (IEnumerable<Actor> actor, string message) = DapperEntities.QueryDatabase<Actor>("SELECT ActorName, ActorBirthDay, ActorProfession, ActorBio, UploadFilePath FROM Actor JOIN UploadFile on Actor_UploadFileRef = UploadFileId WHERE ActorId = @ActorId", Connection.FilmLand(), new { ActorId = actorId });
+            if (message == "Success")
+            {
+                if (actor.Count() == 0)
+                {
+                    _customLogger.CustomDatabaseError("Id was not found in the database");
+                    return (null, "Not found");
+                }
+                else
+                {
+                    _customLogger.SuccessDatabase(message);
+                    return (actor.FirstOrDefault(), "Success");
+                }
+            }
+            else
+            {
+                _customLogger.ErrorDatabase(message);
+                return (null, "Error");
+            }
+        }
     }
 }
