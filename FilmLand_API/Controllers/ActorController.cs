@@ -82,41 +82,33 @@ namespace FilmLand_API.Controllers
         {
             _customLogger.StartAPI("Get Filter Actor Summary");
 
-            // Fetch all actor summaries
             IEnumerable<ActorSummary> allActorSummaryList = _unitOfWork.Actor.GetAllActorSummary();
 
-            // Check for null
             if (allActorSummaryList == null)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
 
-            // Split the search query into individual words
             var searchWords = searchQuery
                 .Split(' ', StringSplitOptions.RemoveEmptyEntries)
                 .Select(word => word.Trim().ToLower())
-                .ToHashSet(); // Use a HashSet for fast lookups
+                .ToHashSet(); 
 
-            // Filter the actor summaries
             var filteredActorSummaries = allActorSummaryList
                 .Where(actor =>
                 {
-                    // Split actor's name into words and convert to lowercase
                     var actorNameWords = actor.ActorName
                         .Split(' ', StringSplitOptions.RemoveEmptyEntries)
                         .Select(word => word.Trim().ToLower());
 
-                    // Check if any word in actor's name starts with any of the search terms
                     return searchWords.Any(searchWord =>
                         actorNameWords.Any(actorNameWord =>
                             actorNameWord.StartsWith(searchWord)));
                 })
                 .ToList();
 
-            // Log the end of the API processing
             _customLogger.EndAPI("Get Filter Actor Summary");
 
-            // Return the filtered results
             return Ok(filteredActorSummaries);
         }
 
