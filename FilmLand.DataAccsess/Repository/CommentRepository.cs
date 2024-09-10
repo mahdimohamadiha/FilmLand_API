@@ -35,7 +35,7 @@ namespace FilmLand.DataAccsess.Repository
         }
         public IEnumerable<Comment> GetComment(Guid idMovie)
         {
-            (IEnumerable<Comment> siteMenuList, string message) = DapperEntities.QueryDatabase<Comment>("SELECT * FROM Comment WHERE MovieRef = @MovieRef", Connection.FilmLand(), new { MovieRef = idMovie });
+            (IEnumerable<Comment> siteMenuList, string message) = DapperEntities.QueryDatabase<Comment>("SELECT * FROM Comment WHERE MovieRef = @MovieRef AND IsProfanity = 0", Connection.FilmLand(), new { MovieRef = idMovie });
             if (message == "Success")
             {
                 _customLogger.SuccessDatabase(message);
