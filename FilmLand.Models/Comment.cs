@@ -19,6 +19,7 @@ namespace FilmLand.Models
         public Guid MovieRef { get; set; }
         public Guid ReplyTo { get; set; }
         public bool? IsProfanity { get; set; }
+        public string? Feeling { get; set; }
 
     }
 }
