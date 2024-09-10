@@ -22,7 +22,7 @@ namespace FilmLand.DataAccsess.Repository
         public string AddComment(CommentDTO commentDTO)
         {
             Guid idComment = Guid.NewGuid();
-            string message = DapperEntities.ExecuteDatabase("INSERT INTO Comment (CommentId, CommentWriter, CommentText, CommentLike, CommentDisLike, CommentCreateDate, CommentIsStatus, CommentIsDelete, MovieRef, ReplyTo, IsProfanity, Feeling) VALUES (@CommentId, @CommentWriter, @CommentText, 0, 0, GETDATE(), 1, 0, @MovieRef, @ReplyTo, @IsProfanity);", Connection.FilmLand(), new { CommentId = idComment, CommentWriter = commentDTO.CommentWriter, CommentText = commentDTO.CommentText, MovieRef = commentDTO.MovieRef, ReplyTo = commentDTO.ReplyTo , IsProfanity = commentDTO.IsProfanity, Feeling = commentDTO.Feeling });
+            string message = DapperEntities.ExecuteDatabase("INSERT INTO Comment (CommentId, CommentWriter, CommentText, CommentLike, CommentDisLike, CommentCreateDate, CommentIsStatus, CommentIsDelete, MovieRef, ReplyTo, IsProfanity, Feeling) VALUES (@CommentId, @CommentWriter, @CommentText, 0, 0, GETDATE(), 1, 0, @MovieRef, @ReplyTo, @IsProfanity, @Feeling);", Connection.FilmLand(), new { CommentId = idComment, CommentWriter = commentDTO.CommentWriter, CommentText = commentDTO.CommentText, MovieRef = commentDTO.MovieRef, ReplyTo = commentDTO.ReplyTo , IsProfanity = commentDTO.IsProfanity, Feeling = commentDTO.Feeling });
             if (message == "Success")
             {
                 _customLogger.SuccessDatabase(message);
