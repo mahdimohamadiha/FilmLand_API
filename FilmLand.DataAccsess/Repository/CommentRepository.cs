@@ -22,7 +22,7 @@ namespace FilmLand.DataAccsess.Repository
         public string AddComment(CommentDTO commentDTO)
         {
             Guid idComment = Guid.NewGuid();
-            string message = DapperEntities.ExecuteDatabase("INSERT INTO Comment (CommentId, CommentWriter, CommentText, CommentLike, CommentDisLike, CommentCreateDate, CommentIsStatus, CommentIsDelete, MovieRef, ReplyTo) VALUES (@CommentId, @CommentWriter, @CommentText, 0, 0, GETDATE(), 1, 0, @MovieRef, @ReplyTo);", Connection.FilmLand(), new { CommentId = idComment, CommentWriter = commentDTO.CommentWriter, CommentText = commentDTO.CommentText, MovieRef = commentDTO.MovieRef, ReplyTo = commentDTO.ReplyTo });
+            string message = DapperEntities.ExecuteDatabase("INSERT INTO Comment (CommentId, CommentWriter, CommentText, CommentLike, CommentDisLike, CommentCreateDate, CommentIsStatus, CommentIsDelete, MovieRef, ReplyTo, IsProfanity) VALUES (@CommentId, @CommentWriter, @CommentText, 0, 0, GETDATE(), 1, 0, @MovieRef, @ReplyTo, @IsProfanity);", Connection.FilmLand(), new { CommentId = idComment, CommentWriter = commentDTO.CommentWriter, CommentText = commentDTO.CommentText, MovieRef = commentDTO.MovieRef, ReplyTo = commentDTO.ReplyTo , IsProfanity = commentDTO.IsProfanity });
             if (message == "Success")
             {
                 _customLogger.SuccessDatabase(message);
@@ -35,7 +35,7 @@ namespace FilmLand.DataAccsess.Repository
         }
         public IEnumerable<Comment> GetComment(Guid idMovie)
         {
-            (IEnumerable<Comment> siteMenuList, string message) = DapperEntities.QueryDatabase<Comment>("SELECT * FROM Comment WHERE MovieRef = @MovieRef", Connection.FilmLand(), new { MovieRef = idMovie });
+            (IEnumerable<Comment> siteMenuList, string message) = DapperEntities.QueryDatabase<Comment>("SELECT * FROM Comment WHERE MovieRef = @MovieRef AND IsProfanity = 0", Connection.FilmLand(), new { MovieRef = idMovie });
             if (message == "Success")
             {
                 _customLogger.SuccessDatabase(message);

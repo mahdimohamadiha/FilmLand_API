@@ -12,6 +12,8 @@ namespace FilmLand.Models.DTO
         public string CommentText { get; set; }
         public Guid MovieRef { get; set; }
         public Guid? ReplyTo { get; set; }
+        public bool? IsProfanity { get; set; }
+
 
     }
 }

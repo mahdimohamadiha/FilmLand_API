@@ -18,10 +18,7 @@ namespace FilmLand.Models
         public bool CommentIsDelete { get; set; }
         public Guid MovieRef { get; set; }
         public Guid ReplyTo { get; set; }
-
-
-
-
+        public bool? IsProfanity { get; set; }
 
     }
 }
