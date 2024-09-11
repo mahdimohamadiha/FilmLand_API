@@ -84,7 +84,22 @@ namespace FilmLand_API.Controllers
             _customLogger.EndAPI("Get Mini Banner");
             return Ok(subscriptionSummary);
         }
+
+        [HttpGet("Check/{id:Guid}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public ActionResult<IEnumerable<Subscription>> GetSubscriptionUser(Guid id)
+        {
+            _customLogger.StartAPI("Get Subscription User");
+            Guid Subscription = _unitOfWork.Subscription.GetSubscriptionUser(id);
+            if (Subscription == null)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+            _customLogger.EndAPI("Get Subscription User");
+            return Ok(Subscription);
+        }
     }
 
-    
+
 }

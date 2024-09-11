@@ -114,5 +114,24 @@ namespace FilmLand_API.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
+
+        [HttpPut("Answer/{id:Guid}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public ActionResult EditAnswer(Guid id)
+        {
+            _customLogger.StartAPI("Edit Answer Comment");
+            string result = _unitOfWork.Comment.UpdateAnswed(id);
+            if (result == "Success")
+            {
+                _customLogger.EndAPI("Edit Answer Comment");
+                return NoContent();
+            }
+            else
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
     }
 }

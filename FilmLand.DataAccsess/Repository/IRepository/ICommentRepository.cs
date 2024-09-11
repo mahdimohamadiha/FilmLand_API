@@ -16,5 +16,6 @@ namespace FilmLand.DataAccsess.Repository.IRepository
         IEnumerable<Comment> GetProfanityComment();
         string UpdateComment(Guid commentId);
         string RemoveComment(Guid commentId);
+        string UpdateAnswed(Guid commentId);
     }
 }

@@ -70,5 +70,18 @@ namespace FilmLand.DataAccsess.Repository
                 return (null, "Error");
             }
         }
+        public Guid GetSubscriptionUser(Guid idUser)
+        {
+            (IEnumerable<Guid> subscriptions, string message) = DapperEntities.QueryDatabase<Guid>(@"SELECT SubscriptionRef FROM ""User"" WHERE UserId = '71D80E15-7A9C-45AB-9B1F-BE17F5F403FE'", Connection.FilmLand());
+            if (message == "Success")
+            {
+                _customLogger.SuccessDatabase(message);
+            }
+            else
+            {
+                _customLogger.ErrorDatabase(message);
+            }
+            return subscriptions.FirstOrDefault();
+        }
     }
 }
