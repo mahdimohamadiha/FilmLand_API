@@ -77,5 +77,20 @@ namespace FilmLand_API.Controllers
             _customLogger.EndAPI("Get All Cart");
             return Ok(filteredActorSummaries);
         }
+
+        [HttpGet("All")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public ActionResult<IEnumerable<Cart>> GetAllCart()
+        {
+            _customLogger.StartAPI("Get All Cart");
+            IEnumerable<Cart> carts = _unitOfWork.Cart.GetAllCart();
+            if (carts == null)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+            _customLogger.EndAPI("Get All Cart");
+            return Ok(carts);
+        }
     }
 }
