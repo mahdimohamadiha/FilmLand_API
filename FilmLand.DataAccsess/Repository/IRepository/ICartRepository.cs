@@ -13,5 +13,6 @@ namespace FilmLand.DataAccsess.Repository.IRepository
         string AddCart(CartDTO cartDTO);
         IEnumerable<Cart> GetAllCart();
         string AddSingleCart(SingleCartDTO singleCartDTO);
+        IEnumerable<SingleCarts> GetAllSingleCart();
     }
 }

@@ -62,5 +62,18 @@ namespace FilmLand.DataAccsess.Repository
             }
             return message;
         }
+        public IEnumerable<SingleCarts> GetAllSingleCart()
+        {
+            (IEnumerable<SingleCarts> siteMenuList, string message) = DapperEntities.QueryDatabase<SingleCarts>("SELECT  CartId\r\n\t    ,CartTitle\r\n\t\t,[MovieId]\r\n      ,[MoviePersionName]\r\n      ,[MovieEnglishName]\r\n\t  ,[UploadFilePath]\r\n\t  \r\n  FROM [mohamadiha].[dbo].[Movie] join UploadFile on UploadFile_MovieRef = MovieId join CartMovie on MovieId = CartMovie_MovieRef join Cart on CartMovie_CartRef = CartId\r\n  WHERE UploadFileTitle = 'CartPicture'", Connection.FilmLand());
+            if (message == "Success")
+            {
+                _customLogger.SuccessDatabase(message);
+            }
+            else
+            {
+                _customLogger.ErrorDatabase(message);
+            }
+            return siteMenuList;
+        }
     }
 }

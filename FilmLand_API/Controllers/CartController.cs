@@ -111,5 +111,34 @@ namespace FilmLand_API.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
+
+        [HttpGet("GetSingles")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public ActionResult<IEnumerable<Cart>> GetSingleCarts()
+        {
+            _customLogger.StartAPI("Get All Cart");
+            IEnumerable<SingleCarts> carts = _unitOfWork.Cart.GetAllSingleCart();
+            var groupedCarts = carts
+            .GroupBy(sc => new { sc.CartId, sc.CartTitle })
+            .Select(g => new Carts
+            {
+                CartId = g.Key.CartId,
+                CartTitle = g.Key.CartTitle,
+                SingleCartList = g.Select(sc => new SingleCart
+                {
+                    MovieId = sc.MovieId,
+                    MoviePersionName = sc.MoviePersionName,
+                    MovieEnglishName = sc.MovieEnglishName,
+                    UploadFilePath = sc.UploadFilePath
+                }).ToList()
+            }).ToList();
+            if (groupedCarts == null)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+            _customLogger.EndAPI("Get All Cart");
+            return Ok(groupedCarts);
+        }
     }
 }
