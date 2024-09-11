@@ -22,7 +22,7 @@ namespace FilmLand.DataAccsess.Repository
         public string AddComment(CommentDTO commentDTO)
         {
             Guid idComment = Guid.NewGuid();
-            string message = DapperEntities.ExecuteDatabase("INSERT INTO Comment (CommentId, CommentWriter, CommentText, CommentLike, CommentDisLike, CommentCreateDate, CommentIsStatus, CommentIsDelete, MovieRef, ReplyTo, IsProfanity, Feeling) VALUES (@CommentId, @CommentWriter, @CommentText, 0, 0, GETDATE(), 1, 0, @MovieRef, @ReplyTo, @IsProfanity, @Feeling);", Connection.FilmLand(), new { CommentId = idComment, CommentWriter = commentDTO.CommentWriter, CommentText = commentDTO.CommentText, MovieRef = commentDTO.MovieRef, ReplyTo = commentDTO.ReplyTo , IsProfanity = commentDTO.IsProfanity, Feeling = commentDTO.Feeling });
+            string message = DapperEntities.ExecuteDatabase("INSERT INTO Comment (CommentId, CommentWriter, CommentText, CommentLike, CommentDisLike, CommentCreateDate, CommentIsStatus, CommentIsDelete, MovieRef, ReplyTo, IsProfanity, Feeling, IsAnswered) VALUES (@CommentId, @CommentWriter, @CommentText, 0, 0, GETDATE(), 1, 0, @MovieRef, @ReplyTo, @IsProfanity, @Feeling, @IsAnswered);", Connection.FilmLand(), new { CommentId = idComment, CommentWriter = commentDTO.CommentWriter, CommentText = commentDTO.CommentText, MovieRef = commentDTO.MovieRef, ReplyTo = commentDTO.ReplyTo , IsProfanity = commentDTO.IsProfanity, Feeling = commentDTO.Feeling, IsAnswered = commentDTO.IsAnswered });
             if (message == "Success")
             {
                 _customLogger.SuccessDatabase(message);
@@ -46,5 +46,33 @@ namespace FilmLand.DataAccsess.Repository
             }
             return siteMenuList;
         }
+
+        public IEnumerable<Comment> GetAllComment(string filter)
+        {
+            (IEnumerable<Comment> siteMenuList, string message) = DapperEntities.QueryDatabase<Comment>("SELECT *\r\nFROM Comment\r\nWHERE IsProfanity = 0\r\n AND CommentIsDelete = 0 AND ReplyTo IS NULL  AND CommentCreateDate >= DATEADD(" + filter + ", -1, GETDATE())\r\nORDER BY CommentCreateDate DESC ", Connection.FilmLand());
+            if (message == "Success")
+            {
+                _customLogger.SuccessDatabase(message);
+            }
+            else
+            {
+                _customLogger.ErrorDatabase(message);
+            }
+            return siteMenuList;
+        }
+
+        //public IEnumerable<Comment> GetAllComment(string filter)
+        //{
+        //    (IEnumerable<Comment> siteMenuList, string message) = DapperEntities.QueryDatabase<Comment>("SELECT *\r\nFROM Comment\r\nWHERE IsProfanity = 0\r\n AND CommentIsDelete = 0 AND ReplyTo IS NULL  AND CommentCreateDate >= DATEADD(" + filter + ", -1, GETDATE())\r\nORDER BY CommentCreateDate DESC ", Connection.FilmLand());
+        //    if (message == "Success")
+        //    {
+        //        _customLogger.SuccessDatabase(message);
+        //    }
+        //    else
+        //    {
+        //        _customLogger.ErrorDatabase(message);
+        //    }
+        //    return siteMenuList;
+        //}
     }
 }

@@ -40,14 +40,26 @@ namespace FilmLand_API.Controllers
             }
         }
 
-        [HttpGet("All/{id:Guid}")]
+        [HttpGet("{id:Guid}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<IEnumerable<Comment>> GetComment(Guid id)
         {
-            _customLogger.StartAPI("Get All Comment");
+            _customLogger.StartAPI("Get Comment");
             IEnumerable<Comment> comments = _unitOfWork.Comment.GetComment(id);
+            _customLogger.EndAPI("Get Comment");
+            return Ok(comments);
+        }
+
+        [HttpGet("All")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public ActionResult<IEnumerable<Comment>> GetAllComment(string filter)
+        {
+            _customLogger.StartAPI("Get All Comment");
+            IEnumerable<Comment> comments = _unitOfWork.Comment.GetAllComment(filter);
             _customLogger.EndAPI("Get All Comment");
             return Ok(comments);
         }
