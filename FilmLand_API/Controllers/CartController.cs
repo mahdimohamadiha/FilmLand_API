@@ -92,5 +92,24 @@ namespace FilmLand_API.Controllers
             _customLogger.EndAPI("Get All Cart");
             return Ok(carts);
         }
+
+        [HttpPost("AddSingle")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public ActionResult PostCartSingle(SingleCartDTO singleCartDTO)
+        {
+            _customLogger.StartAPI("Add Cart Single");
+            string result = _unitOfWork.Cart.AddSingleCart(singleCartDTO);
+            if (result == "Success")
+            {
+                _customLogger.EndAPI("Add Cart Single");
+                return StatusCode(StatusCodes.Status201Created);
+            }
+            else
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
     }
 }

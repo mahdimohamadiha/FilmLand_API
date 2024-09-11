@@ -47,5 +47,20 @@ namespace FilmLand.DataAccsess.Repository
             }
             return siteMenuList;
         }
+
+        public string AddSingleCart(SingleCartDTO singleCartDTO)
+        {
+            Guid cartMovieId = Guid.NewGuid();
+            string message = DapperEntities.ExecuteDatabase("INSERT INTO CartMovie (CartMovieId, CartMovie_MovieRef, CartMovie_CartRef) VALUES (@CartMovieId, @CartMovie_MovieRef, @CartMovie_CartRef );", Connection.FilmLand(), new { CartMovieId = cartMovieId, CartMovie_MovieRef = singleCartDTO.CartMovie_MovieRef, CartMovie_CartRef = singleCartDTO.CartMovie_CartRef });
+            if (message == "Success")
+            {
+                _customLogger.SuccessDatabase(message);
+            }
+            else
+            {
+                _customLogger.ErrorDatabase(message);
+            }
+            return message;
+        }
     }
 }
