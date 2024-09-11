@@ -3,6 +3,7 @@ using FilmLand.Logs;
 using FilmLand.Models;
 using FilmLand.Models.DTO;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FilmLand_API.Controllers
@@ -62,6 +63,56 @@ namespace FilmLand_API.Controllers
             IEnumerable<Comment> comments = _unitOfWork.Comment.GetAllComment(filter);
             _customLogger.EndAPI("Get All Comment");
             return Ok(comments);
+        }
+
+        [HttpGet("AllProfanity")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public ActionResult<IEnumerable<Comment>> GetProfanityComment()
+        {
+            _customLogger.StartAPI("Get AllProfanity Comment");
+            IEnumerable<Comment> comments = _unitOfWork.Comment.GetProfanityComment();
+            _customLogger.EndAPI("Get AllProfanity Comment");
+            return Ok(comments);
+        }
+
+        [HttpPut("EditProfanity/{id:Guid}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public ActionResult EditProfanityComment(Guid id)
+        {
+            _customLogger.StartAPI("Edit Profanity Comment");
+            string result = _unitOfWork.Comment.UpdateComment(id);
+            if (result == "Success")
+            {
+                _customLogger.EndAPI("Edit Profanity Comment");
+                return NoContent();
+            }
+            else
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [HttpDelete("{id:Guid}")]
+        public ActionResult DeleteSiteMenu(Guid id)
+        {
+            _customLogger.StartAPI("Delete Comment");
+            string result = _unitOfWork.Comment.RemoveComment(id);
+            if (result == "Success")
+            {
+                _customLogger.EndAPI("Delete Comment");
+                return StatusCode(StatusCodes.Status200OK);
+            }
+            else
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
         }
     }
 }
