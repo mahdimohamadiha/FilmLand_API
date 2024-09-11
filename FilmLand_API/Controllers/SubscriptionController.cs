@@ -88,16 +88,16 @@ namespace FilmLand_API.Controllers
         [HttpGet("Check/{id:Guid}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public ActionResult<IEnumerable<Subscription>> GetSubscriptionUser(Guid id)
+        public ActionResult<IEnumerable<User>> GetSubscriptionUser(Guid id)
         {
             _customLogger.StartAPI("Get Subscription User");
-            Guid Subscription = _unitOfWork.Subscription.GetSubscriptionUser(id);
-            if (Subscription == null)
+            IEnumerable<User> Subscription = _unitOfWork.Subscription.GetSubscriptionUser(id);
+            if (Subscription.FirstOrDefault().SubscriptionRef == Guid.Empty)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return Ok("false");
             }
             _customLogger.EndAPI("Get Subscription User");
-            return Ok(Subscription);
+            return Ok("true");
         }
     }
 
