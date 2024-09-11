@@ -115,7 +115,7 @@ namespace FilmLand_API.Controllers
         [HttpGet("GetSingles")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public ActionResult<IEnumerable<Cart>> GetSingleCarts()
+        public ActionResult<IEnumerable<Carts>> GetSingleCarts()
         {
             _customLogger.StartAPI("Get All Cart");
             IEnumerable<SingleCarts> carts = _unitOfWork.Cart.GetAllSingleCart();
