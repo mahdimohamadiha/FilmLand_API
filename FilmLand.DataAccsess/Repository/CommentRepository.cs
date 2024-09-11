@@ -50,7 +50,7 @@ namespace FilmLand.DataAccsess.Repository
 
         public IEnumerable<Comment> GetAllComment(string filter)
         {
-            (IEnumerable<Comment> siteMenuList, string message) = DapperEntities.QueryDatabase<Comment>("SELECT *\r\nFROM Comment\r\nWHERE IsProfanity = 0\r\n AND CommentIsDelete = 0 AND ReplyTo IS NULL  AND CommentCreateDate >= DATEADD(" + filter + ", -1, GETDATE())\r\nORDER BY CommentCreateDate DESC ", Connection.FilmLand());
+            (IEnumerable<Comment> siteMenuList, string message) = DapperEntities.QueryDatabase<Comment>("SELECT *\r\nFROM Comment\r\nWHERE IsProfanity = 0\r\n AND CommentIsDelete = 0 AND ReplyTo IS NULL AND IsAnswered = 0 AND CommentCreateDate >= DATEADD(" + filter + ", -1, GETDATE())\r\nORDER BY CommentCreateDate DESC ", Connection.FilmLand());
             if (message == "Success")
             {
                 _customLogger.SuccessDatabase(message);
