@@ -12,5 +12,6 @@ namespace FilmLand.DataAccsess.Repository.IRepository
         IEnumerable<Subscription> GetAllSubscription();
         string UpdateUser(Guid userId, Guid subscriptionId);
         (SubscriptionSummary, string) GetSubscription(Guid idUser);
+        Guid GetSubscriptionUser(Guid idUser);
     }
 }

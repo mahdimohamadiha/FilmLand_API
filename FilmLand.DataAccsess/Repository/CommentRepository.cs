@@ -103,5 +103,19 @@ namespace FilmLand.DataAccsess.Repository
             }
             return message;
         }
+
+        public string UpdateAnswed(Guid commentId)
+        {
+            string message = DapperEntities.ExecuteDatabase("UPDATE Comment SET IsAnswered = 1 WHERE CommentId = @CommentId", Connection.FilmLand(), new { CommentId = commentId });
+            if (message == "Success")
+            {
+                _customLogger.SuccessDatabase(message);
+            }
+            else
+            {
+                _customLogger.ErrorDatabase(message);
+            }
+            return message;
+        }
     }
 }
