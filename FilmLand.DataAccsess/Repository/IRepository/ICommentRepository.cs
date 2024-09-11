@@ -12,5 +12,6 @@ namespace FilmLand.DataAccsess.Repository.IRepository
     {
         string AddComment(CommentDTO commentDTO);
         IEnumerable<Comment> GetComment(Guid idMovie);
+        IEnumerable<Comment> GetAllComment(string filter);
     }
 }
