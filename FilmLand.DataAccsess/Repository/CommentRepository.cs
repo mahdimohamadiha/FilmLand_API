@@ -36,7 +36,7 @@ namespace FilmLand.DataAccsess.Repository
         }
         public IEnumerable<Comment> GetComment(Guid idMovie)
         {
-            (IEnumerable<Comment> siteMenuList, string message) = DapperEntities.QueryDatabase<Comment>("SELECT * FROM Comment WHERE MovieRef = @MovieRef AND IsProfanity = 0", Connection.FilmLand(), new { MovieRef = idMovie });
+            (IEnumerable<Comment> siteMenuList, string message) = DapperEntities.QueryDatabase<Comment>("SELECT * FROM Comment WHERE MovieRef = @MovieRef AND IsProfanity = 0 AND CommentIsDelete = 0", Connection.FilmLand(), new { MovieRef = idMovie });
             if (message == "Success")
             {
                 _customLogger.SuccessDatabase(message);
@@ -64,7 +64,7 @@ namespace FilmLand.DataAccsess.Repository
 
         public IEnumerable<Comment> GetProfanityComment()
         {
-            (IEnumerable<Comment> siteMenuList, string message) = DapperEntities.QueryDatabase<Comment>("SELECT * FROM Comment WHERE IsProfanity = 1", Connection.FilmLand());
+            (IEnumerable<Comment> siteMenuList, string message) = DapperEntities.QueryDatabase<Comment>("SELECT * FROM Comment WHERE IsProfanity = 1 AND CommentIsDelete = 0", Connection.FilmLand());
             if (message == "Success")
             {
                 _customLogger.SuccessDatabase(message);
