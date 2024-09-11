@@ -21,5 +21,6 @@ namespace FilmLand.DataAccsess.Repository.IRepository
         IUserRepository User { get; }
         ISubscriptionRepository Subscription { get; }
         ICommentRepository Comment { get; }
+        ICartRepository Cart { get; }
     }
 }

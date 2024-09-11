@@ -27,6 +27,7 @@ namespace FilmLand.DataAccsess.Repository
             User = new UserRepository(customLogger);
             Subscription = new SubscriptionRepository(customLogger);
             Comment = new CommentRepository(customLogger);
+            Cart = new CartRepository(customLogger);
         }
         public ISiteMenuRepository SiteMenu { get; private set; }
         public ISliderRepository Slider { get; private set; }
@@ -41,6 +42,8 @@ namespace FilmLand.DataAccsess.Repository
         public IUserRepository User { get; private set; }
         public ISubscriptionRepository Subscription { get; private set; }
         public ICommentRepository Comment { get; private set; }
+
+        public ICartRepository Cart { get; private set; }
 
     }
 }
