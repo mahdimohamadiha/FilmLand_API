@@ -8,6 +8,7 @@ namespace FilmLand.Models
 {
     public class SingleCarts
     {
+        public Guid CartMovieId { get; set; }
         public Guid CartId { get; set; }
         public string CartTitle { get; set; }
         public Guid MovieId { get; set; }

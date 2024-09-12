@@ -127,6 +127,7 @@ namespace FilmLand_API.Controllers
                 CartTitle = g.Key.CartTitle,
                 SingleCartList = g.Select(sc => new SingleCart
                 {
+                    CartMovieId = sc.CartMovieId,
                     MovieId = sc.MovieId,
                     MoviePersionName = sc.MoviePersionName,
                     MovieEnglishName = sc.MovieEnglishName,
@@ -139,6 +140,44 @@ namespace FilmLand_API.Controllers
             }
             _customLogger.EndAPI("Get All Cart");
             return Ok(groupedCarts);
+        }
+
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [HttpDelete("SingleCart/{id:Guid}")]
+        public ActionResult DeleteSingleCart(Guid id)
+        {
+            _customLogger.StartAPI("Delete Single Cart");
+            string result = _unitOfWork.Cart.RemoveSingleCart(id);
+            if (result == "Success")
+            {
+                _customLogger.EndAPI("Delete Single Cart");
+                return StatusCode(StatusCodes.Status200OK);
+            }
+            else
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [HttpDelete("{id:Guid}")]
+        public ActionResult DeleteCart(Guid id)
+        {
+            _customLogger.StartAPI("Delete Single Cart");
+            string result = _unitOfWork.Cart.RemoveCart(id);
+            if (result == "Success")
+            {
+                _customLogger.EndAPI("Delete Single Cart");
+                return StatusCode(StatusCodes.Status200OK);
+            }
+            else
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
         }
     }
 }
