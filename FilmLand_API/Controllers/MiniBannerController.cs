@@ -100,7 +100,7 @@ namespace FilmLand_API.Controllers
                 _customLogger.CustomApiError("No file uploaded");
                 return StatusCode(StatusCodes.Status400BadRequest);
             }
-            var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "slider", miniBannerDTO.File.FileName);
+            var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "minibanner", miniBannerDTO.File.FileName);
             using (var stream = new FileStream(path, FileMode.Create))
             {
                 await miniBannerDTO.File.CopyToAsync(stream);
