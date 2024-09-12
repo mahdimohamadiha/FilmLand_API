@@ -36,7 +36,7 @@ namespace FilmLand.DataAccsess.Repository
 
         public IEnumerable<Cart> GetAllCart()
         {
-            (IEnumerable<Cart> siteMenuList, string message) = DapperEntities.QueryDatabase<Cart>("SELECT * FROM Cart", Connection.FilmLand());
+            (IEnumerable<Cart> siteMenuList, string message) = DapperEntities.QueryDatabase<Cart>("SELECT * FROM Cart WHERE CartIsDelete = 0", Connection.FilmLand());
             if (message == "Success")
             {
                 _customLogger.SuccessDatabase(message);
@@ -64,7 +64,7 @@ namespace FilmLand.DataAccsess.Repository
         }
         public IEnumerable<SingleCarts> GetAllSingleCart()
         {
-            (IEnumerable<SingleCarts> siteMenuList, string message) = DapperEntities.QueryDatabase<SingleCarts>("SELECT  CartId\r\n\t    ,CartTitle\r\n\t\t,[MovieId]\r\n      ,[MoviePersionName]\r\n      ,[MovieEnglishName]\r\n\t  ,[UploadFilePath]\r\n\t  \r\n  FROM [mohamadiha].[dbo].[Movie] join UploadFile on UploadFile_MovieRef = MovieId join CartMovie on MovieId = CartMovie_MovieRef join Cart on CartMovie_CartRef = CartId\r\n  WHERE UploadFileTitle = 'CartPicture'", Connection.FilmLand());
+            (IEnumerable<SingleCarts> siteMenuList, string message) = DapperEntities.QueryDatabase<SingleCarts>("SELECT  CartId,CartTitle,CartMovieId,[MovieId],[MoviePersionName],[MovieEnglishName],[UploadFilePath] FROM [mohamadiha].[dbo].[Movie] join UploadFile on UploadFile_MovieRef = MovieId join CartMovie on MovieId = CartMovie_MovieRef join Cart on CartMovie_CartRef = CartId WHERE UploadFileTitle = 'CartPicture' AND CartIsDelete = 0", Connection.FilmLand());
             if (message == "Success")
             {
                 _customLogger.SuccessDatabase(message);
@@ -74,6 +74,34 @@ namespace FilmLand.DataAccsess.Repository
                 _customLogger.ErrorDatabase(message);
             }
             return siteMenuList;
+        }
+
+        public string RemoveSingleCart(Guid cartMovieId)
+        {
+            string message = DapperEntities.ExecuteDatabase("DELETE FROM CartMovie WHERE CartMovieId = @CartMovieId", Connection.FilmLand(), new { CartMovieId = cartMovieId });
+            if (message == "Success")
+            {
+                _customLogger.SuccessDatabase(message);
+            }
+            else
+            {
+                _customLogger.ErrorDatabase(message);
+            }
+            return message;
+        }
+
+        public string RemoveCart(Guid cartId)
+        {
+            string message = DapperEntities.ExecuteDatabase("UPDATE Cart SET CartIsDelete = 1 WHERE CartId = @CartId", Connection.FilmLand(), new { CartId = cartId });
+            if (message == "Success")
+            {
+                _customLogger.SuccessDatabase(message);
+            }
+            else
+            {
+                _customLogger.ErrorDatabase(message);
+            }
+            return message;
         }
     }
 }
