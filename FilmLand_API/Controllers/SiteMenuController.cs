@@ -38,6 +38,21 @@ namespace FilmLand_API.Controllers
             return Ok(siteMenuList);
         }
 
+        [HttpGet("Header/")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public ActionResult<IEnumerable<SiteMenu>> GetAllSiteMenuHeader()
+        {
+            _customLogger.StartAPI("Get All Site Menu");
+            IEnumerable<SiteMenu> siteMenuList = _unitOfWork.SiteMenu.GetAllSiteMenuHomePage();
+            if (siteMenuList == null)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+            _customLogger.EndAPI("Get All Site Menu");
+            return Ok(siteMenuList);
+        }
+
         [HttpPost("Add")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

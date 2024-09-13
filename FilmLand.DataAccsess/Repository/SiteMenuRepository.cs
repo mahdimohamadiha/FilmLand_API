@@ -34,6 +34,20 @@ namespace FilmLand.DataAccsess.Repository
             return siteMenuList;
         }
 
+        public IEnumerable<SiteMenu> GetAllSiteMenuHomePage()
+        {
+            (IEnumerable<SiteMenu> siteMenuList, string message) = DapperEntities.QueryDatabase<SiteMenu>("SELECT * FROM SiteMenu WHERE SiteMenuIsDelete = 0 AND SiteMenuIsStatus = 1 ORDER BY SiteMenuSort", Connection.FilmLand());
+            if (message == "Success")
+            {
+                _customLogger.SuccessDatabase(message);
+            }
+            else
+            {
+                _customLogger.ErrorDatabase(message);
+            }
+            return siteMenuList;
+        }
+
         public string AddSiteMenu(SiteMenuDTO siteMenuDTO)
         {
             Guid idSiteMenu = Guid.NewGuid();

@@ -11,6 +11,7 @@ namespace FilmLand.DataAccsess.Repository.IRepository
     public interface ISiteMenuRepository
     {
         IEnumerable<SiteMenu> GetAllSiteMenu();
+        IEnumerable<SiteMenu> GetAllSiteMenuHomePage();
 
         string AddSiteMenu(SiteMenuDTO menuSiteDTO);
 
