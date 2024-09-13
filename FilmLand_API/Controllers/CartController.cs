@@ -164,7 +164,7 @@ namespace FilmLand_API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [HttpDelete("{id:Guid}")]
+        [HttpDelete("DeleteCart/{id:Guid}")]
         public ActionResult DeleteCart(Guid id)
         {
             _customLogger.StartAPI("Delete Single Cart");
