@@ -74,7 +74,7 @@ namespace FilmLand_API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public ActionResult<IEnumerable<Movies>> GetMovies(string category, string genre)
+        public ActionResult<IEnumerable<Movies>> GetMovies(string category, string genre, string? search)
         {
             MovieParameterDTO movieParameterDTO = new MovieParameterDTO
             {
@@ -82,9 +82,34 @@ namespace FilmLand_API.Controllers
                 GenreParameter = genre
             };
             _customLogger.StartAPI("Get Movies");
+            
             IEnumerable<Movies> movies = _unitOfWork.Movie.GetMovies(movieParameterDTO);
+            if (search != null)
+            {
+                var searchWords = search
+                .Split(' ', StringSplitOptions.RemoveEmptyEntries)
+                .Select(word => word.Trim().ToLower())
+                .ToHashSet();
+
+                var filteredActorSummaries = movies
+                    .Where(actor =>
+                    {
+                        var actorNameWords = actor.MovieEnglishName
+                            .Split(' ', StringSplitOptions.RemoveEmptyEntries)
+                            .Select(word => word.Trim().ToLower());
+
+                        return searchWords.Any(searchWord =>
+                            actorNameWords.Any(actorNameWord =>
+                                actorNameWord.StartsWith(searchWord)));
+                    })
+                    .ToList();
+                return Ok(filteredActorSummaries);
+
+            }
+
             _customLogger.EndAPI("Get Movies");
             return Ok(movies);
+
         }
     }
 }
