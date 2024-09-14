@@ -45,7 +45,9 @@ namespace FilmLand_API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<IEnumerable<MovieFile>> GetSingleMovieAllFile(Guid id)
-        {
+        {  
+
+
             _customLogger.StartAPI("Get All Movie File");
             IEnumerable<MovieFile> movieFileList = _unitOfWork.MovieFile.GetAllMovieFile(id);
             var responseAllMovieFile = movieFileList
