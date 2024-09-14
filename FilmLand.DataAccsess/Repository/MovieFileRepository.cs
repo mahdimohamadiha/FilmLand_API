@@ -34,7 +34,7 @@ namespace FilmLand.DataAccsess.Repository
         }
         public IEnumerable<MovieFile> GetAllMovieFile(Guid movieId)
         {
-            (IEnumerable<MovieFile> allMovieFileList, string message) = DapperEntities.QueryDatabase<MovieFile>("SELECT [MovieFileId]\r\n\t  ,[MovieFileChapter]\r\n      ,[MovieFileEpisode]\r\n      ,[MovieFileDubbing]\r\n      ,[MovieFileIsCensored]\r\n      ,[MovieFileSubtitleURL]\r\n\t  ,[MovieFileQuality]\r\n\t  ,[MovieFile_MovieURL]\r\nFROM [MovieFile] left join [MovieFileDetail] on MovieFile.MovieFileId = MovieFileDetail.MovieFileRef\r\nWHERE [MovieRef] = @MovieId AND MovieFileIsDelete = 0", Connection.FilmLand(), new { MovieId = movieId });
+            (IEnumerable<MovieFile> allMovieFileList, string message) = DapperEntities.QueryDatabase<MovieFile>("SELECT [MovieFileId]\r\n\t  ,[MovieFileChapter]\r\n      ,[MovieFileEpisode]\r\n      ,[MovieFileDubbing]\r\n      ,[MovieFileIsCensored]\r\n      ,[MovieFileSubtitleURL]\r\n\t  ,[MovieFileQuality]\r\n\t  ,[MovieFile_MovieURL]\r\nFROM [MovieFile] left join [MovieFileDetail] on MovieFile.MovieFileId = MovieFileDetail.MovieFileRef\r\nWHERE [MovieRef] = @MovieId AND MovieFileIsDelete = 0 order by MovieFileEpisode", Connection.FilmLand(), new { MovieId = movieId });
             if (message == "Success")
             {
                 _customLogger.SuccessDatabase(message);
