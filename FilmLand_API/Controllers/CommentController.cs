@@ -133,5 +133,17 @@ namespace FilmLand_API.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
+
+        [HttpGet("FirstReport")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public ActionResult<IEnumerable<FirstReport>> FirstReport()
+        {
+            _customLogger.StartAPI("Get  Comment");
+            IEnumerable<FirstReport> comments = _unitOfWork.Comment.FirstReport2();
+            _customLogger.EndAPI("Get Comment");
+            return Ok(comments);
+        }
     }
 }

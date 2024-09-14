@@ -17,5 +17,6 @@ namespace FilmLand.DataAccsess.Repository.IRepository
         string UpdateComment(Guid commentId);
         string RemoveComment(Guid commentId);
         string UpdateAnswed(Guid commentId);
+        IEnumerable<FirstReport> FirstReport2();
     }
 }

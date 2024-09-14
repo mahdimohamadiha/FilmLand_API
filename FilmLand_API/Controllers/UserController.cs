@@ -65,5 +65,29 @@ namespace FilmLand_API.Controllers
             }
         }
 
+        [HttpPost("LoginAdmin")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public ActionResult<Guid> LoginAdmin([FromBody] AdminDTO adminDTO)
+        {
+            _customLogger.StartAPI("Login user");
+            (IEnumerable<Admin> admins, string massage) = _unitOfWork.User.LoginAdmin(adminDTO);
+            if (massage == "Success")
+            {
+                if (admins.Count() == 0)
+                {
+                    _customLogger.CustomApiError("User not found");
+                    return StatusCode(StatusCodes.Status204NoContent);
+                }
+                _customLogger.EndAPI("Login user");
+                return Ok(admins.FirstOrDefault().AdminId);
+            }
+            else
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
     }
 }

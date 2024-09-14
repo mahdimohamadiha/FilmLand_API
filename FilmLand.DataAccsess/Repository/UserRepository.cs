@@ -53,6 +53,23 @@ namespace FilmLand.DataAccsess.Repository
             }
         }
 
+        public (IEnumerable<Admin>, string) LoginAdmin(AdminDTO adminDTO)
+        {
+            (IEnumerable<Admin> admins, string message) = DapperEntities.QueryDatabase<Admin>(@"
+                SELECT [AdminId], [Adminname], [AdminPassword], [AdminIsStatus], [AdminIsDelete] FROM [Admin] WHERE Adminname = @Adminname AND AdminPassword = @AdminPassword;",
+                Connection.FilmLand(), new { Adminname = adminDTO.Adminname, AdminPassword = adminDTO.AdminPassword });
+            if (message == "Success")
+            {
+                _customLogger.SuccessDatabase(message);
+                return (admins, "Success");
+            }
+            else
+            {
+                _customLogger.ErrorDatabase(message);
+                return (null, "Error");
+            }
+        }
+
         public (User, string) GetUser(Guid idUser)
         {
             (IEnumerable<User> users, string message) = DapperEntities.QueryDatabase<User>("SELECT * FROM [User] WHERE UserId = @UserId", Connection.FilmLand(), new { UserId = idUser });

@@ -13,5 +13,6 @@ namespace FilmLand.DataAccsess.Repository.IRepository
         (Guid, string) Register(RegisterDTO registerDTO);
         (IEnumerable<User>, string) Login(LoginDTO loginDTO);
         (User, string) GetUser(Guid idUser);
+        (IEnumerable<Admin>, string) LoginAdmin(AdminDTO adminDTO);
     }
 }
