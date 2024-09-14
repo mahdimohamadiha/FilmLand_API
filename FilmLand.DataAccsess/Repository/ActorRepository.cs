@@ -44,7 +44,7 @@ namespace FilmLand.DataAccsess.Repository
         }
         public IEnumerable<ActorSummary> GetAllActorSummary()
         {
-            (IEnumerable<ActorSummary> allActorSummaryList, string message) = DapperEntities.QueryDatabase<ActorSummary>("SELECT [ActorId]\r\n      ,[ActorName]\r\nFROM [Actor]", Connection.FilmLand());
+            (IEnumerable<ActorSummary> allActorSummaryList, string message) = DapperEntities.QueryDatabase<ActorSummary>("SELECT [ActorId]\r\n      ,[ActorName]\r\nFROM [Actor] WHERE ActorIsDelete = 0", Connection.FilmLand());
             if (message == "Success")
             {
                 _customLogger.SuccessDatabase(message);
@@ -77,6 +77,19 @@ namespace FilmLand.DataAccsess.Repository
                 _customLogger.ErrorDatabase(message);
                 return (null, "Error");
             }
+        }
+        public string RemoveActor(Guid actorId)
+        {
+            string message = DapperEntities.ExecuteDatabase("UPDATE Actor SET ActorIsDelete = 1 WHERE ActorId = @ActorId", Connection.FilmLand(), new { ActorId = actorId });
+            if (message == "Success")
+            {
+                _customLogger.SuccessDatabase(message);
+            }
+            else
+            {
+                _customLogger.ErrorDatabase(message);
+            }
+            return message;
         }
     }
 }
