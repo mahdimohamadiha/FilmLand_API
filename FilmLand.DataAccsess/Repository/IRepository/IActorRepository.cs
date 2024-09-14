@@ -13,5 +13,6 @@ namespace FilmLand.DataAccsess.Repository.IRepository
         string AddActor(ActorAndUploadFileDTO actorAndUploadFileDTO);
         IEnumerable<ActorSummary> GetAllActorSummary();
         public (Actor, string) GetActor(Guid actorId);
+        string RemoveActor(Guid actorId);
     }
 }

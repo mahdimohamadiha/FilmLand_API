@@ -132,6 +132,25 @@ namespace FilmLand_API.Controllers
             return Ok(actor);
         }
 
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [HttpDelete("DeleteActor/{id:Guid}")]
+        public ActionResult DeleteActor(Guid id)
+        {
+            _customLogger.StartAPI("Delete Actor");
+            string result = _unitOfWork.Actor.RemoveActor(id);
+            if (result == "Success")
+            {
+                _customLogger.EndAPI("Delete Actor");
+                return StatusCode(StatusCodes.Status200OK);
+            }
+            else
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
 
     }
 }

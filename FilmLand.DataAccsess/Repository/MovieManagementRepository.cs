@@ -106,27 +106,41 @@ namespace FilmLand.DataAccsess.Repository
             return allMovieList;
         }
 
-        public (IEnumerable<Movie>, string) GetMovie(Guid movieId)
+        public string RemoveMovie(Guid movieId)
         {
-            (IEnumerable<Movie> movieList, string message) = DapperEntities.QueryDatabase<Movie>("SELECT [MovieId]\r\n\t\t,[MoviePersionName]\r\n\t\t,[MovieEnglishName]\r\n\t\t,[MovieTitle]\r\n\t\t,[MovieReleaseDate]\r\n\t\t,[MovieStatus]\r\n\t\t,[MovieCountryProduct]\r\n\t\t,[MovieAgeCategory]\r\n\t\t,[MovieOriginalLanguage]\r\n\t\t,[MovieIMDBScore]\r\n\t\t,[MovieAuthor]\r\n\t\t,[MovieDirector]\r\n\t\t,[MovieDuration]\r\n\t\t,[MovieSummary]\r\n\t\t,[MovieAbout]\r\n\t\t,[MovieBudget]\r\n\t\t,[MovieIsStatus]\r\n\t\t,[GenreTitle]\r\n\t\t,[GenreId]\r\n\t\t,[CategoryTitle]\r\n\t\t,[CategoryId]\r\nFROM ((([Movie] left join [MovieCategory] on Movie.MovieId = MovieCategory.MovieCategory_MovieRef) left join Category on Category.CategoryId = MovieCategory.MovieCategory_CategoryRef) left join [MovieGenre] on Movie.MovieId = MovieGenre.MovieGenre_MovieRef) left join Genre on Genre.GenreId = MovieGenre.MovieGenre_GenreRef\r\nWHERE Movie.MovieId = @MovieId", Connection.FilmLand(), new { MovieId = movieId });
+            string message = DapperEntities.ExecuteDatabase("UPDATE Movie SET MovieIsDelete = 1 WHERE MovieId = @MovieId", Connection.FilmLand(), new { MovieId = movieId });
             if (message == "Success")
             {
-                if (movieList.Count() == 0)
-                {
-                    _customLogger.CustomDatabaseError("Id was not found in the database");
-                    return (null, "Not found");
-                }
-                else
-                {
-                    _customLogger.SuccessDatabase(message);
-                    return (movieList, "Success");
-                }
+                _customLogger.SuccessDatabase(message);
             }
             else
             {
                 _customLogger.ErrorDatabase(message);
-                return (null, "Error");
             }
+            return message;
         }
+
+        //public (IEnumerable<Movie>, string) GetMovie(Guid movieId)
+        //{
+        //    (IEnumerable<Movie> movieList, string message) = DapperEntities.QueryDatabase<Movie>("SELECT [MovieId]\r\n\t\t,[MoviePersionName]\r\n\t\t,[MovieEnglishName]\r\n\t\t,[MovieTitle]\r\n\t\t,[MovieReleaseDate]\r\n\t\t,[MovieStatus]\r\n\t\t,[MovieCountryProduct]\r\n\t\t,[MovieAgeCategory]\r\n\t\t,[MovieOriginalLanguage]\r\n\t\t,[MovieIMDBScore]\r\n\t\t,[MovieAuthor]\r\n\t\t,[MovieDirector]\r\n\t\t,[MovieDuration]\r\n\t\t,[MovieSummary]\r\n\t\t,[MovieAbout]\r\n\t\t,[MovieBudget]\r\n\t\t,[MovieIsStatus]\r\n\t\t,[GenreTitle]\r\n\t\t,[GenreId]\r\n\t\t,[CategoryTitle]\r\n\t\t,[CategoryId]\r\nFROM ((([Movie] left join [MovieCategory] on Movie.MovieId = MovieCategory.MovieCategory_MovieRef) left join Category on Category.CategoryId = MovieCategory.MovieCategory_CategoryRef) left join [MovieGenre] on Movie.MovieId = MovieGenre.MovieGenre_MovieRef) left join Genre on Genre.GenreId = MovieGenre.MovieGenre_GenreRef\r\nWHERE Movie.MovieId = @MovieId", Connection.FilmLand(), new { MovieId = movieId });
+        //    if (message == "Success")
+        //    {
+        //        if (movieList.Count() == 0)
+        //        {
+        //            _customLogger.CustomDatabaseError("Id was not found in the database");
+        //            return (null, "Not found");
+        //        }
+        //        else
+        //        {
+        //            _customLogger.SuccessDatabase(message);
+        //            return (movieList, "Success");
+        //        }
+        //    }
+        //    else
+        //    {
+        //        _customLogger.ErrorDatabase(message);
+        //        return (null, "Error");
+        //    }
+        //}
     }
 }

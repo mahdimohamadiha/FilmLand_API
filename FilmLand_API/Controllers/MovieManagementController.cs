@@ -119,57 +119,76 @@ namespace FilmLand_API.Controllers
             return Ok(responseAllMovies);
         }
 
-        [HttpGet("{id:Guid}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public ActionResult<Movie> GetMovie(Guid id)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [HttpDelete("DeleteMovie/{id:Guid}")]
+        public ActionResult DeleteMovie(Guid id)
         {
-            _customLogger.StartAPI("Get Movie");
-            (IEnumerable<Movie> movies, string message) = _unitOfWork.MovieManagement.GetMovie(id);
-            var responseMovies = movies
-                .GroupBy(m => m.MovieId)
-                .Select(g => new ResponseMovie
-                {
-                    MovieId = g.Key,
-                    MoviePersionName = g.First().MoviePersionName,
-                    MovieEnglishName = g.First().MovieEnglishName,
-                    MovieTitle = g.First().MovieTitle,
-                    MovieReleaseDate = g.First().MovieReleaseDate,
-                    MovieStatus = g.First().MovieStatus,
-                    MovieCountryProduct = g.First().MovieCountryProduct,
-                    MovieAgeCategory = g.First().MovieAgeCategory,
-                    MovieOriginalLanguage = g.First().MovieOriginalLanguage,
-                    MovieIMDBScore = g.First().MovieIMDBScore,
-                    MovieAuthor = g.First().MovieAuthor,
-                    MovieDirector = g.First().MovieDirector,
-                    MovieDuration = g.First().MovieDuration,
-                    MovieSummary = g.First().MovieSummary,
-                    MovieAbout = g.First().MovieAbout,
-                    MovieBudget = g.First().MovieBudget,
-                    MovieLike = g.First().MovieLike,
-                    MovieDislike = g.First().MovieDislike,
-                    MovieCollectionRef = g.First().MovieCollectionRef,
-                    MovieCreateDate = g.First().MovieCreateDate,
-                    MovieModifiedDate = g.First().MovieModifiedDate,
-                    MovieIsStatus = g.First().MovieIsStatus,
-                    MovieIsDelete = g.First().MovieIsDelete,
-                    CategoryTitle = g.First().CategoryTitle,
-                    CategoryId = g.First().CategoryId,
-                    GenreTitles = g.Select(m => m.GenreTitle).Distinct().ToList(),
-                    GenreIds = g.Select(m => m.GenreId).Distinct().ToList()
-
-                }).FirstOrDefault();
-            if (message == "Not found")
+            _customLogger.StartAPI("Delete Movie");
+            string result = _unitOfWork.MovieManagement.RemoveMovie(id);
+            if (result == "Success")
             {
-                return StatusCode(StatusCodes.Status400BadRequest);
+                _customLogger.EndAPI("Delete Movie");
+                return StatusCode(StatusCodes.Status200OK);
             }
-            else if (message == "Error")
+            else
             {
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
-            _customLogger.EndAPI("Get Movie");
-            return Ok(responseMovies);
         }
+
+        //[HttpGet("{id:Guid}")]
+        //[ProducesResponseType(StatusCodes.Status200OK)]
+        //[ProducesResponseType(StatusCodes.Status400BadRequest)]
+        //[ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        //public ActionResult<Movie> GetMovie(Guid id)
+        //{
+        //    _customLogger.StartAPI("Get Movie");
+        //    (IEnumerable<Movie> movies, string message) = _unitOfWork.MovieManagement.GetMovie(id);
+        //    var responseMovies = movies
+        //        .GroupBy(m => m.MovieId)
+        //        .Select(g => new ResponseMovie
+        //        {
+        //            MovieId = g.Key,
+        //            MoviePersionName = g.First().MoviePersionName,
+        //            MovieEnglishName = g.First().MovieEnglishName,
+        //            MovieTitle = g.First().MovieTitle,
+        //            MovieReleaseDate = g.First().MovieReleaseDate,
+        //            MovieStatus = g.First().MovieStatus,
+        //            MovieCountryProduct = g.First().MovieCountryProduct,
+        //            MovieAgeCategory = g.First().MovieAgeCategory,
+        //            MovieOriginalLanguage = g.First().MovieOriginalLanguage,
+        //            MovieIMDBScore = g.First().MovieIMDBScore,
+        //            MovieAuthor = g.First().MovieAuthor,
+        //            MovieDirector = g.First().MovieDirector,
+        //            MovieDuration = g.First().MovieDuration,
+        //            MovieSummary = g.First().MovieSummary,
+        //            MovieAbout = g.First().MovieAbout,
+        //            MovieBudget = g.First().MovieBudget,
+        //            MovieLike = g.First().MovieLike,
+        //            MovieDislike = g.First().MovieDislike,
+        //            MovieCollectionRef = g.First().MovieCollectionRef,
+        //            MovieCreateDate = g.First().MovieCreateDate,
+        //            MovieModifiedDate = g.First().MovieModifiedDate,
+        //            MovieIsStatus = g.First().MovieIsStatus,
+        //            MovieIsDelete = g.First().MovieIsDelete,
+        //            CategoryTitle = g.First().CategoryTitle,
+        //            CategoryId = g.First().CategoryId,
+        //            GenreTitles = g.Select(m => m.GenreTitle).Distinct().ToList(),
+        //            GenreIds = g.Select(m => m.GenreId).Distinct().ToList()
+
+        //        }).FirstOrDefault();
+        //    if (message == "Not found")
+        //    {
+        //        return StatusCode(StatusCodes.Status400BadRequest);
+        //    }
+        //    else if (message == "Error")
+        //    {
+        //        return StatusCode(StatusCodes.Status500InternalServerError);
+        //    }
+        //    _customLogger.EndAPI("Get Movie");
+        //    return Ok(responseMovies);
+        //}
     }
 }

@@ -101,7 +101,7 @@ namespace FilmLand.DataAccsess.Repository
 
                 }
             }
-            (IEnumerable<Movies> movies, string message) = DapperEntities.QueryDatabase<Movies>("SELECT MovieId, MoviePersionName, MovieEnglishName, MovieReleaseDate, MovieCountryProduct, MovieIMDBScore, MovieSummary, UploadFilePath FROM Movie join MovieCategory on MovieId = MovieCategory_MovieRef join Category on CategoryId = MovieCategory_CategoryRef join MovieGenre on MovieId = MovieGenre_MovieRef join Genre on GenreId = MovieGenre_GenreRef join UploadFile on MovieId = UploadFile_MovieRef WHERE " + para + " UploadFileTitle = 'CartPicture' GROUP BY MovieId, MoviePersionName, MovieEnglishName, MovieReleaseDate, MovieCountryProduct, MovieIMDBScore, MovieSummary, UploadFilePath", Connection.FilmLand());
+            (IEnumerable<Movies> movies, string message) = DapperEntities.QueryDatabase<Movies>("SELECT MovieId, MoviePersionName, MovieEnglishName, MovieReleaseDate, MovieCountryProduct, MovieIMDBScore, MovieSummary, UploadFilePath FROM Movie join MovieCategory on MovieId = MovieCategory_MovieRef join Category on CategoryId = MovieCategory_CategoryRef join MovieGenre on MovieId = MovieGenre_MovieRef join Genre on GenreId = MovieGenre_GenreRef join UploadFile on MovieId = UploadFile_MovieRef WHERE " + para + " UploadFileTitle = 'CartPicture' AND MovieIsDelete = 0 GROUP BY MovieId, MoviePersionName, MovieEnglishName, MovieReleaseDate, MovieCountryProduct, MovieIMDBScore, MovieSummary, UploadFilePath", Connection.FilmLand());
             if (message == "Success")
             {
                 _customLogger.SuccessDatabase(message);
